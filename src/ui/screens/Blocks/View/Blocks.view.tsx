@@ -10,17 +10,11 @@ interface BlocksViewProps {
 const BlocksView: FC<BlocksViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Blocks</h1>
+      <div className={styles.screenTitle}>Blocks</div>
       <div className={styles.mainContent}>
-        <div className={styles.formTop}>
-          <div id="movieFormTopContainer">
-            <div id="searchMovieContainer"></div>
-            <div id="importMovieContainer"></div>
-          </div>
-        </div>
-        <div className={styles.movieFormBody}>
-          <div className={styles.movieFormBodyContainer}>
-            <CurationItemList
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}>
+            {/* <CurationItemList
               items={viewModel.blocks.map((block) => ({
                 id: block.mediaItemId,
                 title: block.title,
@@ -34,11 +28,8 @@ const BlocksView: FC<BlocksViewProps> = ({ viewModel }) => {
               onEdit={viewModel.onEdit}
               onSave={viewModel.onSave}
               onRemove={viewModel.onRemove}
-            />
+            /> */}
           </div>
-        </div>
-        <div className={styles.formBottom}>
-          <div id="movieFormBottomContainer"></div>
         </div>
       </div>
     </div>

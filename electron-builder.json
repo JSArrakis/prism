@@ -11,6 +11,6 @@
     "category": "Utility"
   },
   "win": {
-    "target": ["msi"]
+    "target": ["portable"]
   }
 }

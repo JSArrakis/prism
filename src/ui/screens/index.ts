@@ -1,3 +1,4 @@
+import Aesthetics from './Aesthetics/Aesthetics';
 import AgeGroups from './AgeGroups/AgeGroups';
 import Blocks from './Blocks/Blocks';
 import Cascade from './Cascade/Cascade';
@@ -19,6 +20,7 @@ import Specialties from './Specialties/Specialties';
 import Splash from './Splash/Splash';
 
 export {
+  Aesthetics,
   AgeGroups,
   Blocks,
   Cascade,

@@ -1,6 +1,7 @@
-import { FC } from 'react';
-import { SpecialtiesViewModel } from './Specialties.viewmodel';
-import styles from './Specialties.module.css';
+import { FC } from "react";
+import { SpecialtiesViewModel } from "./Specialties.viewmodel";
+import styles from "./Specialties.module.css";
+import TagChipList from "../../../components/TagChipList/TagChipList";
 
 interface SpecialtiesViewProps {
   viewModel: SpecialtiesViewModel;
@@ -9,9 +10,22 @@ interface SpecialtiesViewProps {
 const SpecialtiesView: FC<SpecialtiesViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Specialties</h1>
-      <p>Content goes here</p>
-      <div className={styles.mainContent} />
+      <div className={styles.screenTitle}>Specialties</div>
+      <div className={styles.mainContent}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}>
+            <TagChipList
+              items={viewModel.items}
+              item={viewModel.item}
+              type="tag"
+              setItem={viewModel.setItem}
+              onAdd={viewModel.addTag}
+              onRemove={viewModel.removeTag}
+              onSearch={viewModel.searchTags}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

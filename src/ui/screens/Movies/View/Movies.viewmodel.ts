@@ -11,8 +11,6 @@ interface MoviesData {
   currentMovieList: PrismMediaItem[];
   selectedMovie: PrismMediaItem | null;
   isEditModalOpen: boolean;
-  tags: PrismSegmentedTags;
-  collections: PrismCurationObj[];
 }
 interface MoviesActions {
   editMovie: (movie: PrismMediaItem) => void;
@@ -27,8 +25,6 @@ export interface MoviesViewModel extends MoviesData, MoviesActions {}
 const useMoviesViewModel = (
   navigate: ReturnType<typeof useRootStack>
 ): MoviesViewModel => {
-  const collections: PrismCurationObj[] = [];
-
   const $getMovies = useGetAllMovies();
   const $createMovie = useCreateMovie();
   const $deleteMovie = useDeleteMovie();
@@ -43,12 +39,6 @@ const useMoviesViewModel = (
     null
   );
 
-  useEffect(() => {
-    console.log("newMovies updated:", newMovies);
-    console.log("savedMovies updated:", savedMovies);
-    console.log("movies updated:", movies);
-  }, [newMovies, savedMovies, movies]);
-
   const calculateSize = (obj: any): string => {
     const bytes = new TextEncoder().encode(JSON.stringify(obj)).length;
     const kB = bytes / 1024;
@@ -58,29 +48,6 @@ const useMoviesViewModel = (
     return `${bytes.toFixed(2)} bytes / ${kB.toFixed(2)} KB / ${mB.toFixed(
       2
     )} MB / ${gB.toFixed(2)} GB`;
-  };
-
-  const tags: PrismSegmentedTags = {
-    EraTags: ["1970s", "1980s", "1990s", "2000s", "2010s", "2020s"],
-    GenreTags: [
-      "Action",
-      "Adventure",
-      "Comedy",
-      "Drama",
-      "Fantasy",
-      "Horror",
-      "Mystery",
-      "Romance",
-      "Sci-Fi",
-      "Thriller",
-      "Political",
-      "Space Opera",
-      "Superhero",
-      "Western",
-    ],
-    SpecialtyTags: ["Star Wars", "Toonami"],
-    AgeGroupTags: ["Kids", "Family", "Young Adult", "Mature", "All Ages"],
-    HolidayTags: ["Christmas", "Halloween"],
   };
 
   useEffect(() => {
@@ -163,8 +130,6 @@ const useMoviesViewModel = (
     currentMovieList: movies,
     selectedMovie,
     isEditModalOpen,
-    tags,
-    collections,
     editMovie,
     saveMovie,
     onRemove,

@@ -8,8 +8,6 @@ interface MoviesViewProps {
 }
 
 const MoviesView: FC<MoviesViewProps> = ({ viewModel }) => {
-
-
   const handleEdit = (movie: PrismMediaItem) => {
     viewModel.editMovie(movie);
   };
@@ -30,15 +28,13 @@ const MoviesView: FC<MoviesViewProps> = ({ viewModel }) => {
     <div className={styles.screen}>
       <div className={styles.screenTitle}>Movies</div>
       <div className={styles.mainContent}>
-        <div className={styles.movieFormBorder}>
-          <div className={styles.movieFormBodyContainer}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}>
             <MediaItemList
               isEditModalOpen={viewModel.isEditModalOpen}
               items={viewModel.currentMovieList}
               type="movie"
               selectedItem={selectedMovie}
-              tags={viewModel.tags}
-              collections={viewModel.collections}
               onEdit={handleEdit}
               onSave={viewModel.saveMovie}
               onRemove={viewModel.onRemove}

@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import {
+  Aesthetics,
   AgeGroups,
   Blocks,
   Cascade,
@@ -27,6 +28,7 @@ function RootStackNavigator() {
     <Routes>
       <Route path="/" element={<Splash />} />
       <Route element={<MainLayout />}>
+        <Route path="/aesthetics" element={<Aesthetics />} />
         <Route path="/age-groups" element={<AgeGroups />} />
         <Route path="/blocks" element={<Blocks />} />
         <Route path="/cascade" element={<Cascade />} />

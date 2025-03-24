@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import useRootStack from '../../../navigation/useRootStack';
+import { useState } from "react";
+import useRootStack from "../../../navigation/useRootStack";
 
 interface MainLayoutData {
   isModalOpen: boolean;
@@ -20,7 +20,7 @@ const useMainLayoutViewModel = (): MainLayoutViewModel => {
   const navigate = useRootStack();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [expandedAccordion, setExpandedAccordion] = useState<string | null>(
-    null,
+    null
   );
 
   const closeModal = () => {
@@ -40,61 +40,64 @@ const useMainLayoutViewModel = (): MainLayoutViewModel => {
 
   const navigateTo = (destination: string) => {
     switch (destination) {
-      case 'age-groups':
-        navigate('/age-groups');
+      case "aesthetics":
+        navigate("/aesthetics");
         break;
-      case 'blocks':
-        navigate('/blocks');
+      case "age-groups":
+        navigate("/age-groups");
         break;
-      case 'cascade':
-        navigate('/cascade');
+      case "blocks":
+        navigate("/blocks");
         break;
-      case 'collections':
-        navigate('/collections');
+      case "cascade":
+        navigate("/cascade");
         break;
-      case 'commercials':
-        navigate('/commercials');
+      case "collections":
+        navigate("/collections");
         break;
-      case 'eras':
-        navigate('/eras');
+      case "commercials":
+        navigate("/commercials");
         break;
-      case 'genres':
-        navigate('/genres');
+      case "eras":
+        navigate("/eras");
         break;
-      case 'help':
-        toggleAccordion('help');
-        navigate('/help');
+      case "genres":
+        navigate("/genres");
         break;
-      case 'home':
-        navigate('/home');
+      case "help":
+        toggleAccordion("help");
+        navigate("/help");
         break;
-      case 'holidays':
-        navigate('/holidays');
+      case "home":
+        navigate("/home");
         break;
-      case 'mosaic':
-        navigate('/mosaic');
+      case "holidays":
+        navigate("/holidays");
         break;
-      case 'movies':
-        navigate('/movies');
+      case "mosaic":
+        navigate("/mosaic");
         break;
-      case 'music':
-        navigate('/music');
+      case "movies":
+        navigate("/movies");
         break;
-      case 'promos':
-        navigate('/promos');
+      case "music":
+        navigate("/music");
         break;
-      case 'settings':
-        toggleAccordion('settings');
-        navigate('/settings');
+      case "promos":
+        navigate("/promos");
         break;
-      case 'shorts':
-        navigate('/shorts');
+      case "settings":
+        toggleAccordion("settings");
+        navigate("/settings");
         break;
-      case 'shows':
-        navigate('/shows');
+      case "shorts":
+        navigate("/shorts");
         break;
-      case 'specialties':
-        navigate('/specialties');
+      case "shows":
+        navigate("/shows");
+        break;
+      case "specialties":
+        navigate("/specialties");
         break;
       default:
         console.warn(`Unknown destination: ${destination}`);

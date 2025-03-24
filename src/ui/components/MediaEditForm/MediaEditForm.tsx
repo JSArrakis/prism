@@ -1,32 +1,88 @@
 import { FC, useState, useRef, useEffect } from "react";
 import fuzzysort from "fuzzysort";
-import styles from "./SimpleMediaEditForm.module.css";
+import styles from "./MediaEditForm.module.css";
 import { getFileName } from "../../common/helpers";
 import { TAG_CATEGORIES } from "../../common/constants";
 import useDebounce from "../../hooks/useDebounce";
 import CollectionListItem from "./CollectionListItem/CollectionListItem";
 import SavedCollectionItem from "./SavedCollectionItem/SavedCollectionItem";
+import { useGetAllAestheticTags } from "../../services/tags/useAestheticTags";
+import { useGetAllEraTags } from "../../services/tags/useEraTags";
+import { useGetAllGenreTags } from "../../services/tags/useGenreTags";
+import { useGetAllSpecialtyTags } from "../../services/tags/useSpecialtyTags";
 
-interface SimpleMediaEditFormProps {
+interface MediaEditFormProps {
   item: PrismMediaItem;
   itemType: string;
-  tags: PrismSegmentedTags;
-  collections: PrismCurationObj[];
   onSave: (item: PrismMediaItem) => void;
   onRemove: (item: PrismMediaItem) => void;
   onCancel: (item: PrismMediaItem) => void;
 }
 
-const SimpleMediaEditForm: FC<SimpleMediaEditFormProps> = ({
+const MediaEditForm: FC<MediaEditFormProps> = ({
   item,
   itemType,
-  tags,
-  collections,
   onSave,
   onRemove,
   onCancel,
 }) => {
-  const allTags = Object.values(tags).flat();
+  // #region tags
+  const $getAllAestheticTags = useGetAllAestheticTags();
+  const $getAllEraTags = useGetAllEraTags();
+  const $getAllGenreTags = useGetAllGenreTags();
+  const $getAllSpecialtyTags = useGetAllSpecialtyTags();
+  const [aestheticTags, setAestheticTags] = useState<Tag[]>([]);
+  const [ageGroupTags, setAgeGroupTags] = useState<Tag[]>([]);
+  const [eraTags, setEraTags] = useState<Tag[]>([]);
+  const [genreTags, setGenreTags] = useState<Tag[]>([]);
+  const [holidayTags, setHolidayTags] = useState<Tag[]>([]);
+  const [specialtyTags, setSpecialtyTags] = useState<Tag[]>([]);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
+
+  useEffect(() => {
+    if ($getAllAestheticTags.data) {
+      setAestheticTags($getAllAestheticTags.data);
+    }
+  }, [$getAllAestheticTags.data]);
+
+  useEffect(() => {
+    if ($getAllEraTags.data) {
+      setEraTags($getAllEraTags.data);
+    }
+  }, [$getAllEraTags.data]);
+
+  useEffect(() => {
+    if ($getAllGenreTags.data) {
+      setGenreTags($getAllGenreTags.data);
+    }
+  }, [$getAllGenreTags.data]);
+
+  useEffect(() => {
+    if ($getAllSpecialtyTags.data) {
+      setSpecialtyTags($getAllSpecialtyTags.data);
+    }
+  }, [$getAllSpecialtyTags.data]);
+
+  useEffect(() => {
+    setAllTags([
+      ...aestheticTags,
+      ...ageGroupTags,
+      ...eraTags,
+      ...genreTags,
+      ...holidayTags,
+      ...specialtyTags,
+    ]);
+  }, [
+    aestheticTags,
+    ageGroupTags,
+    eraTags,
+    genreTags,
+    holidayTags,
+    specialtyTags,
+  ]);
+
+  // #endregion
+
   const [tagListSearchTerm, setTagListSearchTerm] = useState("");
   const [collectionSearch, setCollectionSearch] = useState(false);
   const [collectionSearchTerm, setCollectionSearchTerm] = useState("");
@@ -48,15 +104,15 @@ const SimpleMediaEditForm: FC<SimpleMediaEditFormProps> = ({
   const collectionListRef = useRef<HTMLDivElement>(null);
 
   const onSearch = (searchTerm: string) => {
-    if (!searchTerm) {
-      setSelectedTagList(allTags);
-      return;
-    }
-    const results = fuzzysort.go(searchTerm, allTags, {
-      threshold: -1000,
-      limit: 50,
-    });
-    setSelectedTagList(results.map((result) => result.target));
+    // if (!searchTerm) {
+    //   setSelectedTagList(allTags);
+    //   return;
+    // }
+    // const results = fuzzysort.go(searchTerm, allTags, {
+    //   threshold: -1000,
+    //   limit: 50,
+    // });
+    // setSelectedTagList(results.map((result) => result.target));
   };
   const debouncedSearch = useDebounce(onSearch, 1000);
 
@@ -67,25 +123,37 @@ const SimpleMediaEditForm: FC<SimpleMediaEditFormProps> = ({
   useEffect(() => {
     switch (selectedCategory) {
       case TAG_CATEGORIES.AGE_GROUP:
-        setSelectedTagList(tags.AgeGroupTags);
+        setSelectedTagList(ageGroupTags.map((tag) => tag.name));
         break;
       case TAG_CATEGORIES.GENRE:
-        setSelectedTagList(tags.GenreTags);
+        setSelectedTagList(genreTags.map((tag) => tag.name));
+        break;
+      case TAG_CATEGORIES.AESTHETIC:
+        setSelectedTagList(aestheticTags.map((tag) => tag.name));
         break;
       case TAG_CATEGORIES.SPECIALTY:
-        setSelectedTagList(tags.SpecialtyTags);
+        setSelectedTagList(specialtyTags.map((tag) => tag.name));
         break;
       case TAG_CATEGORIES.ERA:
-        setSelectedTagList(tags.EraTags);
+        setSelectedTagList(eraTags.map((tag) => tag.name));
         break;
       case TAG_CATEGORIES.HOLIDAY:
-        setSelectedTagList(tags.HolidayTags);
+        setSelectedTagList(holidayTags.map((tag) => tag.name));
         break;
       default:
-        setSelectedTagList(allTags);
+        setSelectedTagList(allTags.map((tag) => tag.name));
         break;
     }
-  }, [selectedCategory, tags]);
+  }, [
+    selectedCategory,
+    allTags,
+    ageGroupTags,
+    genreTags,
+    aestheticTags,
+    specialtyTags,
+    eraTags,
+    holidayTags,
+  ]);
 
   const handleSave = () => {
     const updatedItem: PrismMediaItem = {
@@ -212,86 +280,30 @@ const SimpleMediaEditForm: FC<SimpleMediaEditFormProps> = ({
           </div>
         </div>
         <div className={styles.collectionContainer}>
-          {collectionSearch ? (
-            <>
-              <div
-                className={styles.collectionSavedSwitch}
-                onClick={() => toggleCollection()}
-              >
-                <div className={styles.collectionSavedSwitchLabel}>SAVED</div>
-                <div className={styles.folderSymbol}>
-                  <span className="material-symbols-rounded">folder</span>
-                </div>
-              </div>
-              <div className={styles.collectionSwitchContainer}>
-                <div className={styles.collectionHeader}>
-                  <div className={styles.collectionLabel}>Collections:</div>
-                  <input
-                    className={styles.collectionSearch}
-                    type="text"
-                    placeholder="SEARCH AVAILABLE COLLECTIONS"
-                    value={tagListSearchTerm}
-                    onChange={(e) => setTagListSearchTerm(e.target.value)}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    ref={searchCollectionsRef}
-                  />
-                </div>
-                <div className={styles.collectionList} ref={collectionListRef}>
-                  {collections.map((collection) => (
-                    <CollectionListItem
-                      key={collection.mediaItemId}
-                      collection={collection}
-                      onSave={handleCollectionItemSave}
-                    />
-                  ))}
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div
-                className={styles.collectionSearchSwitch}
-                onClick={() => toggleCollection()}
-              >
-                <div className={styles.collectionSearchSwitchLabel}>SEARCH</div>
-                <div className={styles.searchSymbol}>
-                  <span className="material-symbols-rounded">search</span>
-                </div>
-              </div>
-              <div className={styles.collectionSwitchContainer}>
-                <div className={styles.collectionHeader}>
-                  <div className={styles.collectionLabel}>Collections:</div>
-                  <input
-                    className={styles.collectionSearch}
-                    type="text"
-                    placeholder="SEARCH SAVED COLLECTIONS"
-                    value={tagListSearchTerm}
-                    onChange={(e) => setCollectionSearchTerm(e.target.value)}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    ref={searchCollectionsRef}
-                  />
-                </div>
-                <div className={styles.collectionList}>
-                  {item.collections?.map((collection) => (
-                    <SavedCollectionItem
-                      key={collection.curationRefId}
-                      collectionRef={collection}
-                      onSave={handleEditSaveCollectionItem}
-                    />
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+          <div
+            className={styles.collectionSavedSwitch}
+            onClick={() => toggleCollection()}
+          >
+            <div className={styles.collectionSavedSwitchLabel}>COLLECTIONS</div>
+          </div>
+          <div className={styles.collectionSwitchContainer}>
+            <div className={styles.collectionList} ref={collectionListRef}>
+              {item.collections?.map((collection) => (
+                <SavedCollectionItem
+                  key={collection.curationRefId}
+                  collectionRef={collection}
+                  onSave={handleEditSaveCollectionItem}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.tagsContainer}>
         <div className={styles.tagListContainer}>
           <select multiple className={styles.tagList} ref={tagListRef}>
-            {selectedTagList.map((tag) => (
-              <option key={tag} value={tag}>
+            {selectedTagList.map((tag, index) => (
+              <option key={index} value={tag}>
                 {tag}
               </option>
             ))}
@@ -322,4 +334,4 @@ const SimpleMediaEditForm: FC<SimpleMediaEditFormProps> = ({
   );
 };
 
-export default SimpleMediaEditForm;
+export default MediaEditForm;

@@ -10,10 +10,10 @@ interface CollectionsViewProps {
 const CollectionsView: FC<CollectionsViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Collection</h1>
+      <div className={styles.screenTitle}>Collections</div>
       <div className={styles.mainContent}>
-        <div className={styles.movieFormBody}>
-          <div className={styles.movieFormBodyContainer}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}>
             <CurationItemList
               type="collection"
               items={viewModel.collections}

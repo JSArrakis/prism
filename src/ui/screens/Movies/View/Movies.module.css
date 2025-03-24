@@ -20,10 +20,10 @@
   flex: 1;
   width: 100%;
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: center;
 }
 
-.movieFormBorder {
+.screenFormBorder {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -38,21 +38,7 @@
   padding: 3px;
 }
 
-.movieFormBody {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  flex-grow: 1;
-  height: 100%;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin: 10px;
-  margin-top: 0px;
-}
-
-.movieFormBodyContainer {
+.screenFormBodyContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;

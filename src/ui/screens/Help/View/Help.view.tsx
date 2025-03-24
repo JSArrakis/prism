@@ -9,9 +9,12 @@ interface HelpViewProps {
 const HelpView: FC<HelpViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Help</h1>
-      <p>Content goes here</p>
-      <div className={styles.mainContent} />
+      <div className={styles.screenTitle}>Help</div>
+      <div className={styles.mainContent}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}></div>
+        </div>
+      </div>
     </div>
   );
 };

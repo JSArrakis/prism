@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import { Outlet } from 'react-router-dom';
-import { MainLayoutViewModel } from './MainLayout.viewmodel';
-import styles from './MainLayout.module.css';
-import { Button, Modal } from '../../../components';
+import { FC } from "react";
+import { Outlet } from "react-router-dom";
+import { MainLayoutViewModel } from "./MainLayout.viewmodel";
+import styles from "./MainLayout.module.css";
+import { Button, Modal } from "../../../components";
 
 interface MainLayoutViewProps {
   viewModel: MainLayoutViewModel;
@@ -19,7 +19,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
       <div className={styles.sidebar}>
         <div className={styles.sidebarTop}>
           <div
-            onClick={() => navigateTo('home')}
+            onClick={() => navigateTo("home")}
             role="button"
             tabIndex={0}
             className={styles.logoContainer}
@@ -28,130 +28,144 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
           </div>
           <div className={styles.sidebarContent}>
             <Button
-              onClick={() => toggleAccordion('media')}
+              onClick={() => toggleAccordion("media")}
               className={styles.mediaButton}
             >
               Media
             </Button>
             <div
-              className={`${styles.subButtons} ${expandedAccordion === 'media' ? styles.expanded : ''}`}
+              className={`${styles.subButtons} ${
+                expandedAccordion === "media" ? styles.expanded : ""
+              }`}
             >
               <Button
-                onClick={() => navigateTo('movies')}
+                onClick={() => navigateTo("movies")}
                 className={styles.subButton}
               >
                 Movies
               </Button>
               <Button
-                onClick={() => navigateTo('shows')}
+                onClick={() => navigateTo("shows")}
                 className={styles.subButton}
               >
                 Shows
               </Button>
               <Button
-                onClick={() => navigateTo('shorts')}
+                onClick={() => navigateTo("shorts")}
                 className={styles.subButton}
               >
                 Shorts
               </Button>
               <Button
-                onClick={() => navigateTo('music')}
+                onClick={() => navigateTo("music")}
                 className={styles.subButton}
               >
                 Music Videos
               </Button>
               <Button
-                onClick={() => navigateTo('commercials')}
+                onClick={() => navigateTo("commercials")}
                 className={styles.subButton}
               >
                 Commercials
               </Button>
               <Button
-                onClick={() => navigateTo('promos')}
+                onClick={() => navigateTo("promos")}
                 className={styles.subButton}
               >
                 Promos
               </Button>
             </div>
             <Button
-              onClick={() => toggleAccordion('tags')}
+              onClick={() => toggleAccordion("tags")}
               className={styles.mediaButton}
             >
               Tags
             </Button>
             <div
-              className={`${styles.subButtons} ${expandedAccordion === 'tags' ? styles.expanded : ''}`}
+              className={`${styles.subButtons} ${
+                expandedAccordion === "tags" ? styles.expanded : ""
+              }`}
             >
               <Button
-                onClick={() => navigateTo('age-groups')}
+                onClick={() => navigateTo("age-groups")}
                 className={styles.subButton}
               >
                 Age Groups
               </Button>
               <Button
-                onClick={() => navigateTo('genres')}
+                onClick={() => navigateTo("genres")}
                 className={styles.subButton}
               >
                 Genres
               </Button>
               <Button
-                onClick={() => navigateTo('specialties')}
+                onClick={() => navigateTo("aesthetics")}
+                className={styles.subButton}
+              >
+                Aesthetics
+              </Button>
+              <Button
+                onClick={() => navigateTo("specialties")}
                 className={styles.subButton}
               >
                 Specialties
               </Button>
               <Button
-                onClick={() => navigateTo('eras')}
+                onClick={() => navigateTo("eras")}
                 className={styles.subButton}
               >
                 Eras
               </Button>
               <Button
-                onClick={() => navigateTo('holidays')}
+                onClick={() => navigateTo("holidays")}
                 className={styles.subButton}
               >
                 Holidays
               </Button>
             </div>
             <Button
-              onClick={() => toggleAccordion('prisms')}
+              onClick={() => toggleAccordion("prisms")}
               className={styles.mediaButton}
             >
               Prisms
             </Button>
             <div
-              className={`${styles.subButtons} ${expandedAccordion === 'prisms' ? styles.expanded : ''}`}
+              className={`${styles.subButtons} ${
+                expandedAccordion === "prisms" ? styles.expanded : ""
+              }`}
             >
               <Button
-                onClick={() => navigateTo('cascade')}
+                onClick={() => navigateTo("cascade")}
                 className={styles.subButton}
               >
                 Cascade
               </Button>
               <Button
-                onClick={() => navigateTo('mosaic')}
+                onClick={() => navigateTo("mosaic")}
                 className={styles.subButton}
               >
                 Mosaic
               </Button>
             </div>
             <Button
-              onClick={() => toggleAccordion('curation')}
+              onClick={() => toggleAccordion("curation")}
               className={styles.mediaButton}
             >
               Curation
             </Button>
             <div
-              className={`${styles.subButtons} ${expandedAccordion === 'curation' ? styles.expanded : ''}`}
+              className={`${styles.subButtons} ${
+                expandedAccordion === "curation" ? styles.expanded : ""
+              }`}
             >
               <Button
-                onClick={() => navigateTo('blocks')}
+                onClick={() => navigateTo("blocks")}
                 className={styles.subButton}
               >
                 Blocks
               </Button>
               <Button
-                onClick={() => navigateTo('collections')}
+                onClick={() => navigateTo("collections")}
                 className={styles.subButton}
               >
                 Collections
@@ -161,13 +175,13 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
         </div>
         <div className={styles.sidebarBottom}>
           <Button
-            onClick={() => navigateTo('settings')}
+            onClick={() => navigateTo("settings")}
             className={styles.mediaButton}
           >
             Settings
           </Button>
           <Button
-            onClick={() => navigateTo('help')}
+            onClick={() => navigateTo("help")}
             className={styles.mediaButton}
           >
             Help
@@ -181,7 +195,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
       <Modal
         isOpen={isModalOpen}
         fullScreen
-        style={{ padding: '20px', width: '100%', maxWidth: '500px' }}
+        style={{ padding: "20px", width: "100%", maxWidth: "500px" }}
       >
         <div className={styles.guideModalTitle}>Welcome to Prism</div>
         <div className={styles.guideModalText}>
@@ -193,7 +207,7 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
             Close
           </Button>
           <Button
-            onClick={() => console.log('Guided Tour')}
+            onClick={() => console.log("Guided Tour")}
             className={styles.guidedTourButton}
           >
             Guided Tour

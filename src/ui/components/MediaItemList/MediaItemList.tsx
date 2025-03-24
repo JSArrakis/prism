@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./MediaItemList.module.css";
 import MediaListItem from "./MediaListItem/MediaListItem";
-import SimpleMediaEditForm from "../SimpleMediaEditForm/SimpleMediaEditForm";
+import MediaEditForm from "../MediaEditForm/MediaEditForm";
 import Modal from "../Modal/Modal";
 import useDebounce from "../../hooks/useDebounce";
 
@@ -10,8 +10,6 @@ interface MediaItemListProps {
   type: string;
   isEditModalOpen: boolean;
   selectedItem: PrismMediaItem;
-  tags: PrismSegmentedTags;
-  collections: PrismCurationObj[];
   onEdit: (item: PrismMediaItem) => void;
   onSave: (item: PrismMediaItem) => void;
   onRemove: (item: PrismMediaItem) => void;
@@ -24,8 +22,6 @@ const MediaItemList: FC<MediaItemListProps> = ({
   type,
   isEditModalOpen,
   selectedItem,
-  tags,
-  collections,
   onEdit,
   onSave,
   onRemove,
@@ -78,17 +74,15 @@ const MediaItemList: FC<MediaItemListProps> = ({
           fullScreen={false}
           style={{
             padding: "0px",
-            maxWidth: "calc(100% - 40px)",
+            maxWidth: "calc(100% - 170px)",
           }}
         >
-          <SimpleMediaEditForm
+          <MediaEditForm
             item={selectedItem}
             itemType={type}
-            tags={tags}
             onRemove={onRemove}
             onSave={onSave}
             onCancel={onEdit}
-            collections={collections}
           />
         </Modal>
       </div>

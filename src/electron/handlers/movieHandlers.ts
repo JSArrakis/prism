@@ -1,41 +1,116 @@
-import axios from "axios";
+import http from "http";
 
 export async function getMoviesHandler(): Promise<PrismMediaItem[]> {
-  try {
-    const response = await axios.get(
-      "http://localhost:3001/api/admin/v1/get-all-movies"
-    );
-    const movies: PrismMediaItem[] = response.data;
-    return movies;
-  } catch (error) {
-    throw error;
-  }
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: "localhost",
+      port: 3001,
+      path: "/api/admin/v1/get-all-movies",
+      method: "GET",
+    };
+
+    const req = http.request(options, (res) => {
+      let data = "";
+
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const movies: PrismMediaItem[] = JSON.parse(data);
+          resolve(movies);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.end();
+  });
 }
 
 export async function createMovieHandler(
   movie: PrismMediaItem
 ): Promise<{ message: string; status: number }> {
-  try {
-    const response = await axios.post(
-      "http://localhost:3001/api/admin/v1/create-movie",
-      movie
-    );
-    return { message: response.data.message, status: response.status };
-  } catch (error) {
-    throw error;
-  }
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(movie);
+
+    const options = {
+      hostname: "localhost",
+      port: 3001,
+      path: "/api/admin/v1/create-movie",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": data.length,
+      },
+    };
+
+    const req = http.request(options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const response = JSON.parse(responseData);
+          resolve({ message: response.message, status: res.statusCode || 200 });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.write(data);
+    req.end();
+  });
 }
 
 export async function deleteMovieHandler(
   movie: PrismMediaItem
 ): Promise<{ message: string; status: number }> {
-  try {
+  return new Promise((resolve, reject) => {
     const mediaItemId = movie.mediaItemId;
-    const response = await axios.delete(
-      `http://localhost:3001/api/admin/v1/delete-movie?mediaItemId=${mediaItemId}`
-    );
-    return { message: response.data.message, status: response.status };
-  } catch (error) {
-    throw error;
-  }
+
+    const options = {
+      hostname: "localhost",
+      port: 3001,
+      path: `/api/admin/v1/delete-movie?mediaItemId=${mediaItemId}`,
+      method: "DELETE",
+    };
+
+    const req = http.request(options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const response = JSON.parse(responseData);
+          resolve({ message: response.message, status: res.statusCode || 200 });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.end();
+  });
 }

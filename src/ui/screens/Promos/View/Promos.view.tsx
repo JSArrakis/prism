@@ -9,9 +9,12 @@ interface PromosViewProps {
 const PromosView: FC<PromosViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Promos</h1>
-      <p>Content goes here</p>
-      <div className={styles.mainContent} />
+      <div className={styles.screenTitle}>Promos</div>
+      <div className={styles.mainContent}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}></div>
+        </div>
+      </div>
     </div>
   );
 };

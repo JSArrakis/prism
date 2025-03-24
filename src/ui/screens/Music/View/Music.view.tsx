@@ -9,9 +9,12 @@ interface MusicViewProps {
 const MusicView: FC<MusicViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Music</h1>
-      <p>Content goes here</p>
-      <div className={styles.mainContent} />
+      <div className={styles.screenTitle}>Music Videos</div>
+      <div className={styles.mainContent}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}></div>
+        </div>
+      </div>
     </div>
   );
 };

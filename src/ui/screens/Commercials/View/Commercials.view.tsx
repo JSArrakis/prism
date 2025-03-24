@@ -9,9 +9,12 @@ interface CommercialsViewProps {
 const CommercialsView: FC<CommercialsViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>Commercials</h1>
-      <p>Content goes here</p>
-      <div className={styles.mainContent} />
+      <div className={styles.screenTitle}>Commercials</div>
+      <div className={styles.mainContent}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}></div>
+        </div>
+      </div>
     </div>
   );
 };

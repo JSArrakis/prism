@@ -9,9 +9,12 @@ interface AgeGroupsViewProps {
 const AgeGroupsView: FC<AgeGroupsViewProps> = ({ viewModel }) => {
   return (
     <div className={styles.screen}>
-      <h1>AgeGroups</h1>
-      <p>Content goes here</p>
-      <div className={styles.mainContent} />
+      <div className={styles.screenTitle}>AgeGroups</div>
+      <div className={styles.mainContent}>
+        <div className={styles.screenFormBorder}>
+          <div className={styles.screenFormBodyContainer}></div>
+        </div>
+      </div>
     </div>
   );
 };
