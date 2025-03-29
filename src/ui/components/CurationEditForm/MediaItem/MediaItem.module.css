@@ -7,10 +7,12 @@
   margin: 3px;
   margin-bottom: 0px;
   border-radius: 5px;
+  height: 30px;
   box-sizing: border-box;
   padding: 5px;
   color: white;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .confirmRemove,
@@ -122,32 +124,21 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
   flex-grow: 1;
   overflow: hidden;
-  align-items: center;
 }
 
 .itemTitle {
-  display: flex;
-  align-items: center;
   font-size: 1em;
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 100%;
-}
-
-.itemTitleField {
-  font-size: 1em;
-  font-weight: bold;
-  margin-bottom: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-  background: green;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .titleInput {
@@ -156,24 +147,17 @@
   border: none;
   border-radius: 5px;
   width: 300px;
+  min-width: 300px;
+  max-width: 300px;
   height: 20px;
   padding: 3px;
-  text-align: left;
+  text-align: center;
 }
 
 .titleInput::placeholder {
   color: white;
   opacity: 1;
   text-align: center;
-}
-
-.titleInput:focus {
-  outline: none;
-}
-
-.titleInput:focus::placeholder {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
 }
 
 .itemTitle:hover {
@@ -190,6 +174,7 @@
 }
 
 .itemPathContainer {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -204,14 +189,28 @@
   font-weight: bold;
   color: white;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-grow: 1;
   margin-left: 5px;
+  display: inline-block;
+  transition: transform 10s linear;
 }
 
-.flashRed {
-  animation: flashRed 0.5s ease-in-out 2;
+.itemPathContainer:hover .itemPath {
+  transform: translateX(-100%); /* Scrolls the text to the left */
+}
+
+.itemPathContainer::after {
+  content: ""; /* Empty content for the overlay */
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px; /* Adjust the width of the fade-out effect */
+  height: 100%;
+  background: linear-gradient(
+    to left,
+    #8000ff,
+    transparent
+  ); /* Fade-out effect */
+  pointer-events: none; /* Ensures the overlay doesn't block interactions */
 }
 
 @keyframes flashRed {
@@ -222,4 +221,8 @@
   50% {
     background-color: red;
   }
+}
+
+.flashRed {
+  animation: flashRed 0.5s ease-in-out 2; /* Flash twice */
 }

@@ -8,6 +8,10 @@ interface CollectionsViewProps {
 }
 
 const CollectionsView: FC<CollectionsViewProps> = ({ viewModel }) => {
+  const selectedCollection = viewModel.selectedCollection
+    ? viewModel.selectedCollection
+    : { mediaItemId: "", title: "", description: "", items: [] };
+
   return (
     <div className={styles.screen}>
       <div className={styles.screenTitle}>Collections</div>
@@ -15,14 +19,20 @@ const CollectionsView: FC<CollectionsViewProps> = ({ viewModel }) => {
         <div className={styles.screenFormBorder}>
           <div className={styles.screenFormBodyContainer}>
             <CurationItemList
-              type="collection"
-              items={viewModel.collections}
+              curationItem={selectedCollection}
+              formType="collection"
+              itemType="movies"
+              curationList={viewModel.collections}
+              mediaList={viewModel.movies}
               onEdit={viewModel.onEdit}
               onSave={viewModel.onSave}
+              onSaveNew={viewModel.onSaveNew}
               onRemove={viewModel.onRemove}
               isEditModalOpen={viewModel.isEditModalOpen}
               onAddItem={viewModel.addCollection}
-              onSearch={viewModel.searchCollections}
+              onAddMedia={viewModel.onAddMedia}
+              onRemoveMedia={viewModel.onRemoveMedia}
+              onUpdateSequence={viewModel.onUpdateSequence}
             />
           </div>
         </div>

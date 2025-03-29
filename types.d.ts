@@ -6,8 +6,8 @@ type PrismCurationObj = {
 };
 
 type PrismCurationItem = {
-  sequence: number;
-  title: string;
+  sequence?: number;
+  mediaItemTitle: string;
   mediaItemId: string;
 };
 
@@ -58,6 +58,7 @@ type EventPayloadMapping = {
   getCollections: Promise<PrismCurationObj[]>;
   createCollection: Promise<{ message: string; status: number }>;
   deleteCollection: Promise<{ message: string; status: number }>;
+  updateCollection: Promise<{ message: string; status: number }>;
   getMovies: Promise<PrismMediaItem[]>;
   createMovie: Promise<{ message: string; status: number }>;
   deleteMovie: Promise<{ message: string; status: number }>;
@@ -83,6 +84,9 @@ interface Window {
       collection: PrismCurationObj
     ) => Promise<{ message: string; status: number }>;
     deleteCollectionHandler: (
+      collection: PrismCurationObj
+    ) => Promise<{ message: string; status: number }>;
+    updateCollectionHandler: (
       collection: PrismCurationObj
     ) => Promise<{ message: string; status: number }>;
     getMoviesHandler: () => Promise<PrismMediaItem[]>;

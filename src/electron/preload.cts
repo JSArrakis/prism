@@ -7,6 +7,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
     await ipcInvoke("createCollection", collection),
   deleteCollectionHandler: async (collection: PrismCurationObj) =>
     await ipcInvoke("deleteCollection", collection),
+  updateCollectionHandler: async (collection: PrismCurationObj) =>
+    await ipcInvoke("updateCollection", collection),
   getMoviesHandler: async () => await ipcInvoke("getMovies"),
   createMovieHandler: async (movie: PrismMediaItem) =>
     await ipcInvoke("createMovie", movie),
@@ -18,10 +20,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
   deleteAestheticTagHandler: async (tag: Tag) =>
     await ipcInvoke("deleteAestheticTag", tag),
   getEraTagsHandler: async () => await ipcInvoke("getEraTags"),
-  createEraTagHandler: async (tag: Tag) =>
-    await ipcInvoke("createEraTag", tag),
-  deleteEraTagHandler: async (tag: Tag) =>
-    await ipcInvoke("deleteEraTag", tag),
+  createEraTagHandler: async (tag: Tag) => await ipcInvoke("createEraTag", tag),
+  deleteEraTagHandler: async (tag: Tag) => await ipcInvoke("deleteEraTag", tag),
   getGenreTagsHandler: async () => await ipcInvoke("getGenreTags"),
   createGenreTagHandler: async (tag: Tag) =>
     await ipcInvoke("createGenreTag", tag),

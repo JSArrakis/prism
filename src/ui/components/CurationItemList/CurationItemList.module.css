@@ -101,11 +101,20 @@
   height: 20px;
   width: 300px;
   padding: 3px;
-  text-align: center;
+  text-align: left;
 }
 
 .searchInput::placeholder {
   color: white;
   opacity: 1;
   text-align: center;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.searchInput:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }

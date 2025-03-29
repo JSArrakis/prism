@@ -4,7 +4,6 @@ import styles from "./MediaEditForm.module.css";
 import { getFileName } from "../../common/helpers";
 import { TAG_CATEGORIES } from "../../common/constants";
 import useDebounce from "../../hooks/useDebounce";
-import CollectionListItem from "./CollectionListItem/CollectionListItem";
 import SavedCollectionItem from "./SavedCollectionItem/SavedCollectionItem";
 import { useGetAllAestheticTags } from "../../services/tags/useAestheticTags";
 import { useGetAllEraTags } from "../../services/tags/useEraTags";
@@ -84,8 +83,6 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   // #endregion
 
   const [tagListSearchTerm, setTagListSearchTerm] = useState("");
-  const [collectionSearch, setCollectionSearch] = useState(false);
-  const [collectionSearchTerm, setCollectionSearchTerm] = useState("");
 
   const [tagChipList, setTagChipList] = useState<string[]>([]);
   const [selectedTagList, setSelectedTagList] = useState<string[]>([]);
@@ -100,19 +97,22 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   const aliasRef = useRef<HTMLInputElement>(null);
   const imdbRef = useRef<HTMLInputElement>(null);
   const searchTagsRef = useRef<HTMLInputElement>(null);
-  const searchCollectionsRef = useRef<HTMLInputElement>(null);
   const collectionListRef = useRef<HTMLDivElement>(null);
 
   const onSearch = (searchTerm: string) => {
-    // if (!searchTerm) {
-    //   setSelectedTagList(allTags);
-    //   return;
-    // }
-    // const results = fuzzysort.go(searchTerm, allTags, {
-    //   threshold: -1000,
-    //   limit: 50,
-    // });
-    // setSelectedTagList(results.map((result) => result.target));
+    if (!searchTerm) {
+      setSelectedTagList(allTags.map((tag) => tag.name));
+      return;
+    }
+    const results = fuzzysort.go(
+      searchTerm,
+      allTags.map((tag) => tag.name),
+      {
+        threshold: -1000,
+        limit: 50,
+      }
+    );
+    setSelectedTagList(results.map((result) => result.target));
   };
   const debouncedSearch = useDebounce(onSearch, 1000);
 
@@ -166,10 +166,6 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
     onSave(updatedItem);
   };
 
-  const toggleCollection = () => {
-    setCollectionSearch(!collectionSearch);
-  };
-
   const handleAddChip = () => {
     const selectedTag = tagListRef.current?.value;
 
@@ -190,8 +186,6 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.classList.remove(styles.hidePlaceholder);
   };
-
-  const handleCollectionItemSave = (id: string, sequence: number) => {};
 
   const handleEditSaveCollectionItem = (
     id: string,
@@ -282,7 +276,7 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
         <div className={styles.collectionContainer}>
           <div
             className={styles.collectionSavedSwitch}
-            onClick={() => toggleCollection()}
+            onClick={() => {}}
           >
             <div className={styles.collectionSavedSwitchLabel}>COLLECTIONS</div>
           </div>

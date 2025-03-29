@@ -7,10 +7,12 @@
   margin: 3px;
   margin-bottom: 0px;
   border-radius: 5px;
+  height: 30px;
   box-sizing: border-box;
   padding: 5px;
   color: white;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .confirmRemove,
@@ -20,7 +22,6 @@
   justify-content: center;
   cursor: pointer;
   background: linear-gradient(330deg, #2ab7fe, #582afe);
-  /* background: linear-gradient(330deg, #ff9d00, #b0261c); */
   height: 24px;
   width: 24px;
   border-radius: 5px;
@@ -78,7 +79,6 @@
   justify-content: center;
   cursor: pointer;
   background: linear-gradient(330deg, #2ab7fe, #582afe);
-  /* background: linear-gradient(330deg, #ff9d00, #b0261c); */
   height: 24px;
   width: 24px;
   border-radius: 5px;
@@ -122,32 +122,21 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
   flex-grow: 1;
   overflow: hidden;
-  align-items: center;
 }
 
 .itemTitle {
-  display: flex;
-  align-items: center;
   font-size: 1em;
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 100%;
-}
-
-.itemTitleField {
-  font-size: 1em;
-  font-weight: bold;
-  margin-bottom: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
-  background: green;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
 .titleInput {
@@ -156,24 +145,17 @@
   border: none;
   border-radius: 5px;
   width: 300px;
+  min-width: 300px;
+  max-width: 300px;
   height: 20px;
   padding: 3px;
-  text-align: left;
+  text-align: center;
 }
 
 .titleInput::placeholder {
   color: white;
   opacity: 1;
   text-align: center;
-}
-
-.titleInput:focus {
-  outline: none;
-}
-
-.titleInput:focus::placeholder {
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
 }
 
 .itemTitle:hover {
@@ -189,37 +171,47 @@
   }
 }
 
-.itemPathContainer {
+.sequenceContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  flex-grow: 1;
-  overflow: hidden;
+  box-sizing: border-box;
   margin-left: 5px;
 }
 
-.itemPath {
-  font-size: 1em;
+.sequenceInput {
+  height: 24px;
+  width: 40px;
+  background: #2e3b44;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  margin-right: 5px;
+  text-align: center;
+}
+
+.sequenceInput::placeholder {
+  color: white;
+  opacity: 1;
+  text-align: center;
+}
+
+.sequenceInput:focus {
+  outline: none;
+}
+
+.sequenceInput:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.sequenceLabel {
+  font-size: 14px;
   font-weight: bold;
   color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex-grow: 1;
-  margin-left: 5px;
-}
-
-.flashRed {
-  animation: flashRed 0.5s ease-in-out 2;
-}
-
-@keyframes flashRed {
-  0%,
-  100% {
-    background-color: #1c272d; /* Original background color */
-  }
-  50% {
-    background-color: red;
-  }
+  margin: 0 10px 0 0;
 }

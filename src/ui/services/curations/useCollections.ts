@@ -37,4 +37,18 @@ export const useDeleteCollection = () => {
       queryClient.invalidateQueries({ queryKey: ["collections"] });
     },
   });
-}
+};
+
+export const useUpdateCollection = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (
+      body: PrismCurationObj
+    ): Promise<{ message: string; status: number }> => {
+      return await window.electron.updateCollectionHandler(body);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+    },
+  });
+};

@@ -36,7 +36,7 @@ const TagChipList: FC<TagChipListProps> = ({
   const handleAdd = () => {
     if (!item.trim()) {
       setFlashRed(true);
-      setTimeout(() => setFlashRed(false), 1000); // Remove the class after the animation
+      setTimeout(() => setFlashRed(false), 1000);
       return;
     }
     onAdd();
@@ -62,15 +62,13 @@ const TagChipList: FC<TagChipListProps> = ({
           </div>
         </div>
         <div className={styles.searchContainer}>
-          <div className={styles.searchField}>
-            <input
-              className={styles.searchInput}
-              type="text"
-              placeholder="SEARCH TAGS"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          <input
+            className={styles.searchInput}
+            type="text"
+            placeholder="SEARCH TAGS"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
       </div>
       <div className={styles.chipField}>

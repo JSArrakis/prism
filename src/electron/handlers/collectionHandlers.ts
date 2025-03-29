@@ -114,3 +114,45 @@ export async function deleteCollectionHandler(
     req.end();
   });
 }
+
+export async function updateCollectionHandler(
+  collection: PrismCurationObj
+): Promise<{ message: string; status: number }> {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(collection);
+    const options = {
+      hostname: "localhost",
+      port: 3001,
+      path: "/api/admin/v1/update-collection",
+      method: "PUT", // Changed from POST to PUT
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": data.length,
+      },
+    };
+
+    const req = http.request(options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const response = JSON.parse(responseData);
+          resolve({ message: response.message, status: res.statusCode || 200 });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.write(data);
+    req.end();
+  });
+}

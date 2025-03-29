@@ -6,6 +6,7 @@ import {
   getCollectionsHandler,
   createCollectionHandler,
   deleteCollectionHandler,
+  updateCollectionHandler,
 } from "./handlers/collectionHandlers.js";
 import {
   createMovieHandler,
@@ -64,6 +65,12 @@ app.on("ready", () => {
     "deleteCollection",
     async (_event: any, collection: PrismCurationObj) => {
       return await deleteCollectionHandler(collection);
+    }
+  );
+  ipcMainHandle(
+    "updateCollection",
+    async (_event: any, collection: PrismCurationObj) => {
+      return await updateCollectionHandler(collection);
     }
   );
   ipcMainHandle("getMovies", async () => {

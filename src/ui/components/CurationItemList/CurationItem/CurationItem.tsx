@@ -4,19 +4,20 @@ import styles from "./CurationItem.module.css";
 interface CurationItemProps {
   item: PrismCurationObj;
   onEdit: (item: PrismCurationObj) => void;
-  onSave: (item: PrismCurationObj) => void;
+  onSaveNew: (item: PrismCurationObj) => void;
   onRemove: (item: PrismCurationObj) => void;
 }
 
 const CurationItem: FC<CurationItemProps> = ({
   item,
   onEdit,
-  onSave,
+  onSaveNew,
   onRemove,
 }) => {
   const [title, setTitle] = useState(item.title || "");
   const [hasIncomingTitle, setHasIncomingTitle] = useState(!!item.title);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
+  const [flashRed, setFlashRed] = useState(false);
 
   useEffect(() => {
     if (item.title) {
@@ -30,8 +31,14 @@ const CurationItem: FC<CurationItemProps> = ({
   };
 
   const handleTitleSave = () => {
+    if (!title.trim()) {
+      setFlashRed(true);
+      setTimeout(() => setFlashRed(false), 1000);
+      return;
+    }
     const mediaItemId = title.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
-    onSave({ ...item, title, mediaItemId });
+    console.log("New Media Item:", { ...item, title, mediaItemId });
+    onSaveNew({ ...item, title, mediaItemId });
   };
 
   const handleUndo = () => {
@@ -70,7 +77,9 @@ const CurationItem: FC<CurationItemProps> = ({
             value={title}
             onChange={handleTitleChange}
             placeholder="ENTER TITLE"
-            className={styles.titleInput}
+            className={`${styles.titleInput} ${
+              flashRed ? styles.flashRed : ""
+            }`}
           />
         )}
       </div>

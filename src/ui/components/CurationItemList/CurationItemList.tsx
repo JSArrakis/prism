@@ -1,41 +1,67 @@
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC, useEffect, useState, useCallback, useRef } from "react";
 import styles from "./CurationItemList.module.css";
 import Modal from "../Modal/Modal";
-import useDebounce from "../../hooks/useDebounce";
 import CurationItem from "./CurationItem/CurationItem";
+import CurationEditForm from "../CurationEditForm/CurationEditForm";
 interface CurationItemListProps {
-  items: PrismCurationObj[];
-  type: string;
+  curationItem: PrismCurationObj;
+  curationList: PrismCurationObj[];
+  formType: string;
+  itemType: string;
+  mediaList: PrismMediaItem[];
   isEditModalOpen: boolean;
   onAddItem: () => void;
-  onSearch: (searchString: string) => void;
   onEdit: (item: PrismCurationObj) => void;
-  onSave: (item: PrismCurationObj) => void;
+  onSave: () => void;
+  onSaveNew: (item: PrismCurationObj) => void;
   onRemove: (item: PrismCurationObj) => void;
+  onAddMedia: (item: PrismMediaItem) => void;
+  onRemoveMedia: (item: PrismCurationItem) => void;
+  onUpdateSequence: (item: PrismCurationItem, sequence: number | null) => void;
 }
 
 const CurationItemList: FC<CurationItemListProps> = ({
-  items,
-  type,
+  curationItem,
+  curationList,
+  formType,
+  itemType,
+  mediaList,
   onEdit,
   onSave,
+  onSaveNew,
   onRemove,
   isEditModalOpen,
   onAddItem,
-  onSearch,
+  onAddMedia,
+  onRemoveMedia,
+  onUpdateSequence,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearch = useDebounce(onSearch, 1000);
-
-  const handleSearch = useCallback(() => {
-    if (searchTerm) {
-      debouncedSearch(searchTerm);
-    }
-  }, [searchTerm, debouncedSearch]);
+  const [curationListSearchTerm, setCurationListSearchTerm] = useState("");
+  const searchCurationItemsRef = useRef<HTMLInputElement>(null);
+  const [filteredCurationList, setFilterCurationList] =
+    useState<PrismCurationObj[]>(curationList);
 
   useEffect(() => {
-    handleSearch();
-  }, [searchTerm, handleSearch]);
+    setFilterCurationList(curationList);
+    setCurationListSearchTerm("");
+  }, [curationList]);
+
+  useEffect(() => {
+    if (curationListSearchTerm.trim() === "") {
+      setFilterCurationList(curationList);
+      return;
+    }
+
+    const debouncedSearch = setTimeout(() => {
+      const searchTerm = curationListSearchTerm.toLowerCase();
+      const filteredList = curationList.filter(
+        (item) => item.title && item.title.toLowerCase().includes(searchTerm)
+      );
+      setFilterCurationList(filteredList);
+    }, 600);
+
+    return () => clearTimeout(debouncedSearch);
+  }, [curationListSearchTerm, curationList]);
 
   return (
     <div className={styles.itemContainer}>
@@ -49,22 +75,20 @@ const CurationItemList: FC<CurationItemListProps> = ({
               className={styles.searchInput}
               type="text"
               placeholder="SEARCH TITLE"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={curationListSearchTerm}
+              onChange={(e) => setCurationListSearchTerm(e.target.value)}
+              ref={searchCurationItemsRef}
             />
           </div>
-          {/* <div className={styles.searchButton}>
-            <span className="material-symbols-rounded">search</span>
-          </div> */}
         </div>
       </div>
       <div className={styles.mediaList}>
-        {items.map((item) => (
+        {filteredCurationList.map((item) => (
           <CurationItem
             key={item.mediaItemId}
             item={item}
             onEdit={onEdit}
-            onSave={onSave}
+            onSaveNew={onSaveNew}
             onRemove={onRemove}
           />
         ))}
@@ -73,19 +97,20 @@ const CurationItemList: FC<CurationItemListProps> = ({
           fullScreen={false}
           style={{
             padding: "0px",
-            maxWidth: "calc(100% - 40px)",
+            maxWidth: "calc(100% - 170px)",
           }}
         >
-          <div>Modal</div>
-          {/* <SimpleMediaEditForm
-            item={selectedItem}
-            itemType={type}
-            tags={tags}
-            onDelete={onDelete}
-            onSave={onSave}
+          <CurationEditForm
+            curationItem={curationItem}
+            formType={formType}
+            itemType={itemType}
+            mediaList={mediaList}
             onCancel={onEdit}
-            collections={collections}
-          /> */}
+            onAdd={onAddMedia}
+            onRemove={onRemoveMedia}
+            onUpdateSequence={onUpdateSequence}
+            onSave={onSave}
+          />
         </Modal>
       </div>
     </div>
