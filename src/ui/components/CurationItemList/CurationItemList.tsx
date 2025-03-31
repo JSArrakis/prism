@@ -12,12 +12,9 @@ interface CurationItemListProps {
   isEditModalOpen: boolean;
   onAddItem: () => void;
   onEdit: (item: PrismCurationObj) => void;
-  onSave: () => void;
+  onSave: (item: PrismCurationObj) => void;
   onSaveNew: (item: PrismCurationObj) => void;
   onRemove: (item: PrismCurationObj) => void;
-  onAddMedia: (item: PrismMediaItem) => void;
-  onRemoveMedia: (item: PrismCurationItem) => void;
-  onUpdateSequence: (item: PrismCurationItem, sequence: number | null) => void;
 }
 
 const CurationItemList: FC<CurationItemListProps> = ({
@@ -32,9 +29,6 @@ const CurationItemList: FC<CurationItemListProps> = ({
   onRemove,
   isEditModalOpen,
   onAddItem,
-  onAddMedia,
-  onRemoveMedia,
-  onUpdateSequence,
 }) => {
   const [curationListSearchTerm, setCurationListSearchTerm] = useState("");
   const searchCurationItemsRef = useRef<HTMLInputElement>(null);
@@ -106,9 +100,6 @@ const CurationItemList: FC<CurationItemListProps> = ({
             itemType={itemType}
             mediaList={mediaList}
             onCancel={onEdit}
-            onAdd={onAddMedia}
-            onRemove={onRemoveMedia}
-            onUpdateSequence={onUpdateSequence}
             onSave={onSave}
           />
         </Modal>

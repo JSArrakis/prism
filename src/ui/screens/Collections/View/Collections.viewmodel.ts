@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import useRootStack from "../../../navigation/useRootStack";
 import {
@@ -18,12 +18,9 @@ interface CollectionsActions {
   movies: PrismMediaItem[];
   addCollection: () => void;
   onEdit: (item: PrismCurationObj) => void;
-  onSave: () => void;
+  onSave: (item: PrismCurationObj) => void;
   onSaveNew: (item: PrismCurationObj) => void;
   onRemove: (item: PrismCurationObj) => void;
-  onAddMedia: (item: PrismMediaItem) => void;
-  onRemoveMedia: (item: PrismCurationItem) => void;
-  onUpdateSequence: (item: PrismCurationItem, sequence: number | null) => void;
 }
 
 export interface CollectionsViewModel
@@ -50,7 +47,6 @@ const useCollectionsViewModel = (
   const [selectedCollection, setSelectedCollection] =
     useState<PrismCurationObj | null>(null);
   const [movies, setMovies] = useState<PrismMediaItem[]>([]);
-  const [filteredMovies, setFilteredMovies] = useState<PrismMediaItem[]>([]);
 
   useEffect(() => {
     if ($getCollections.data) {
@@ -71,20 +67,6 @@ const useCollectionsViewModel = (
       : [...savedCollections];
     setCollections(currentCollections);
   }, [newCollection, savedCollections]);
-
-  useEffect(() => {
-    if (selectedCollection) {
-      const filtered = movies.filter(
-        (movie) =>
-          !selectedCollection.items.some(
-            (item) => item.mediaItemId === movie.mediaItemId
-          )
-      );
-      setFilteredMovies(filtered);
-    } else {
-      setFilteredMovies(movies);
-    }
-  }, [selectedCollection, movies]);
 
   const onEdit = (collection: PrismCurationObj) => {
     if (isEditModalOpen) {
@@ -112,9 +94,9 @@ const useCollectionsViewModel = (
     setEditModalState(false);
   };
 
-  const onSave = () => {
+  const onSave = (item: PrismCurationObj) => {
     const deepCopiedSelectedCollection = JSON.parse(
-      JSON.stringify(selectedCollection)
+      JSON.stringify(item)
     );
     const existingCollection = collections.find(
       (c) => c.mediaItemId === deepCopiedSelectedCollection.mediaItemId
@@ -152,83 +134,16 @@ const useCollectionsViewModel = (
     setNewCollection(tempCollection);
   };
 
-  const onAddMedia = (item: PrismMediaItem) => {
-    if (!selectedCollection) {
-      console.error("No collection selected");
-      return;
-    }
-    const updatedCollection = {
-      ...selectedCollection,
-    };
-    updatedCollection.items.push({
-      mediaItemTitle: item.title || "",
-      mediaItemId: item.mediaItemId,
-    });
-
-    setSelectedCollection({ ...updatedCollection });
-
-    setFilteredMovies((prev) =>
-      prev.filter((movie) => movie.mediaItemId !== item.mediaItemId)
-    );
-  };
-
-  const onRemoveMedia = (item: PrismCurationItem) => {
-    if (!selectedCollection) {
-      console.error("No collection selected");
-      return;
-    }
-    const updatedCollection = {
-      ...selectedCollection,
-    };
-    updatedCollection.items = updatedCollection.items.filter(
-      (i) => i.mediaItemId !== item.mediaItemId
-    );
-
-    setSelectedCollection(updatedCollection);
-
-    const removedMovie = movies.find(
-      (movie) => movie.mediaItemId === item.mediaItemId
-    );
-    if (removedMovie) {
-      setFilteredMovies((prev) => [...prev, removedMovie]);
-    }
-  };
-
-  const onUpdateSequence = (
-    item: PrismCurationItem,
-    sequence: number | null
-  ) => {
-    if (!selectedCollection) {
-      console.error("No collection selected");
-      return;
-    }
-    const updatedCollection = {
-      ...selectedCollection,
-    };
-    const itemIndex = updatedCollection.items.findIndex(
-      (i) => i.mediaItemId === item.mediaItemId
-    );
-    if (itemIndex === -1) {
-      console.error("Item not found in collection:", item);
-      return;
-    }
-    updatedCollection.items[itemIndex].sequence = sequence ?? undefined;
-    setSelectedCollection(updatedCollection);
-  };
-
   return {
     selectedCollection,
     isEditModalOpen,
     collections,
-    movies: filteredMovies,
+    movies,
     addCollection,
     onEdit,
     onSave,
     onSaveNew,
     onRemove,
-    onAddMedia,
-    onRemoveMedia,
-    onUpdateSequence,
   };
 };
 

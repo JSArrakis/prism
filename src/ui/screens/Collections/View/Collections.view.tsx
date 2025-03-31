@@ -30,9 +30,6 @@ const CollectionsView: FC<CollectionsViewProps> = ({ viewModel }) => {
               onRemove={viewModel.onRemove}
               isEditModalOpen={viewModel.isEditModalOpen}
               onAddItem={viewModel.addCollection}
-              onAddMedia={viewModel.onAddMedia}
-              onRemoveMedia={viewModel.onRemoveMedia}
-              onUpdateSequence={viewModel.onUpdateSequence}
             />
           </div>
         </div>

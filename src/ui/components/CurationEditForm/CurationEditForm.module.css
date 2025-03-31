@@ -36,6 +36,13 @@
   background: deepskyblue;
 }
 
+.title {
+  margin-left: 5px;
+  margin-bottom: 7px;
+  font-weight: bold;
+}
+
+.titleInput,
 .itemSearch {
   width: 50%;
   height: 26px;
@@ -48,16 +55,19 @@
   margin-bottom: 7px;
 }
 
+.titleInput::placeholder,
 .itemSearch::placeholder {
   color: white;
   opacity: 1;
   text-align: center;
 }
 
+.titleInput:focus,
 .itemSearch:focus {
   outline: none;
 }
 
+.titleInput:focus::placeholder,
 .itemSearch:focus::placeholder {
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
