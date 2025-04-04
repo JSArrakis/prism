@@ -9,7 +9,7 @@ import {
 } from "../../../services/media";
 
 interface MoviesData {
-  currentMovieList: PrismMediaItem[];
+  movies: PrismMediaItem[];
   selectedMovie: PrismMediaItem | null;
   isEditModalOpen: boolean;
 }
@@ -18,7 +18,6 @@ interface MoviesActions {
   saveMovie: (movie: PrismMediaItem) => void;
   onRemove: (movie: PrismMediaItem) => void;
   addMovies: () => void;
-  searchMovies: (searchTerm: string) => void;
 }
 
 export interface MoviesViewModel extends MoviesData, MoviesActions {}
@@ -122,10 +121,6 @@ const useMoviesViewModel = (
     $createMovie.mutate(deepCopiedMovie);
   };
 
-  const searchMovies = (searchTerm: string) => {
-    console.log("Searching movies:", searchTerm);
-  };
-
   const onRemove = (item: PrismMediaItem) => {
     setEditModalState(false);
     if (item.mediaItemId === selectedMovie?.mediaItemId) {
@@ -146,14 +141,13 @@ const useMoviesViewModel = (
   };
 
   return {
-    currentMovieList: movies,
+    movies,
     selectedMovie,
     isEditModalOpen,
     editMovie,
     saveMovie,
     onRemove,
     addMovies,
-    searchMovies,
   };
 };
 

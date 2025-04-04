@@ -16,10 +16,6 @@ const MoviesView: FC<MoviesViewProps> = ({ viewModel }) => {
     viewModel.addMovies();
   };
 
-  const handleSearchMovies = (searchTerm: string) => {
-    viewModel.searchMovies(searchTerm);
-  };
-
   const selectedMovie = viewModel.selectedMovie
     ? viewModel.selectedMovie
     : { mediaItemId: "", title: "", path: "", tags: [] };
@@ -32,14 +28,13 @@ const MoviesView: FC<MoviesViewProps> = ({ viewModel }) => {
           <div className={styles.screenFormBodyContainer}>
             <MediaItemList
               isEditModalOpen={viewModel.isEditModalOpen}
-              items={viewModel.currentMovieList}
+              mediaList={viewModel.movies}
               type="movie"
               selectedItem={selectedMovie}
               onEdit={handleEdit}
               onSave={viewModel.saveMovie}
               onRemove={viewModel.onRemove}
               onAddItem={handleAddMovie}
-              onSearch={handleSearchMovies}
             />
           </div>
         </div>

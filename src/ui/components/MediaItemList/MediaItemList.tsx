@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import styles from "./MediaItemList.module.css";
 import MediaListItem from "./MediaListItem/MediaListItem";
 import MediaEditForm from "../MediaEditForm/MediaEditForm";
@@ -6,7 +6,7 @@ import Modal from "../Modal/Modal";
 import useDebounce from "../../hooks/useDebounce";
 
 interface MediaItemListProps {
-  items: PrismMediaItem[];
+  mediaList: PrismMediaItem[];
   type: string;
   isEditModalOpen: boolean;
   selectedItem: PrismMediaItem;
@@ -14,11 +14,10 @@ interface MediaItemListProps {
   onSave: (item: PrismMediaItem) => void;
   onRemove: (item: PrismMediaItem) => void;
   onAddItem: () => void;
-  onSearch: (searchString: string) => void;
 }
 
 const MediaItemList: FC<MediaItemListProps> = ({
-  items,
+  mediaList,
   type,
   isEditModalOpen,
   selectedItem,
@@ -26,17 +25,33 @@ const MediaItemList: FC<MediaItemListProps> = ({
   onSave,
   onRemove,
   onAddItem,
-  onSearch,
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearch = useDebounce(onSearch, 1000);
+  const [mediaListSearchTerm, setMediaListSearchTerm] = useState("");
+  const searchMediaItemsRef = useRef<HTMLInputElement>(null);
+  const [filteredCurationList, setFilterCurationList] =
+    useState<PrismMediaItem[]>(mediaList);
 
   useEffect(() => {
-    if (!searchTerm) {
+    setFilterCurationList(mediaList);
+    setMediaListSearchTerm("");
+  }, [mediaList]);
+
+  useEffect(() => {
+    if (mediaListSearchTerm.trim() === "") {
+      setFilterCurationList(mediaList);
       return;
     }
-    debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
+
+    const debouncedSearch = setTimeout(() => {
+      const searchTerm = mediaListSearchTerm.toLowerCase();
+      const filteredList = mediaList.filter(
+        (item) => item.title && item.title.toLowerCase().includes(searchTerm)
+      );
+      setFilterCurationList(filteredList);
+    }, 600);
+
+    return () => clearTimeout(debouncedSearch);
+  }, [mediaListSearchTerm, mediaList]);
 
   return (
     <div className={styles.itemContainer}>
@@ -50,14 +65,15 @@ const MediaItemList: FC<MediaItemListProps> = ({
               className={styles.searchInput}
               type="text"
               placeholder="SEARCH TITLE"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              value={mediaListSearchTerm}
+              onChange={(e) => setMediaListSearchTerm(e.target.value)}
+              ref={searchMediaItemsRef}
             />
           </div>
         </div>
       </div>
       <div className={styles.mediaList}>
-        {items.map((item) => (
+        {filteredCurationList.map((item) => (
           <MediaListItem
             key={item.mediaItemId}
             item={item}
