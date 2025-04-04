@@ -21,6 +21,7 @@ export const useCreateCollection = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["movies"] });
     },
   });
 };
@@ -35,6 +36,7 @@ export const useDeleteCollection = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["movies"] });
     },
   });
 };
@@ -49,6 +51,7 @@ export const useUpdateCollection = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["collections"] });
+      queryClient.invalidateQueries({ queryKey: ["movies"] });
     },
   });
 };

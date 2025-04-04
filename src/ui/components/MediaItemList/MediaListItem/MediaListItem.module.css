@@ -5,6 +5,9 @@
   width: calc(100% - 6px);
   background: linear-gradient(90deg, #c52afe, #8000ff);
   margin: 3px;
+  height: 34px;
+  min-height: 34px;
+  max-height: 34px;
   margin-bottom: 0px;
   border-radius: 5px;
   box-sizing: border-box;
@@ -78,7 +81,6 @@
   justify-content: center;
   cursor: pointer;
   background: linear-gradient(330deg, #2ab7fe, #582afe);
-  /* background: linear-gradient(330deg, #ff9d00, #b0261c); */
   height: 24px;
   width: 24px;
   border-radius: 5px;
@@ -126,17 +128,32 @@
   overflow: hidden;
 }
 
+.titleInputContainer,
+.itemTitleContainer {
+  position: relative;
+  width: 400px;
+  min-width: 400px;
+  max-width: 400px;
+  overflow: hidden;
+}
+
 .itemTitle {
   font-size: 1em;
   font-weight: bold;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
   padding-left: 3px;
   padding-right: 3px;
+}
+
+.itemTitleContainer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(to left, #a92afe, transparent);
+  pointer-events: none;
 }
 
 .titleInput {
@@ -144,18 +161,25 @@
   color: white;
   border: none;
   border-radius: 5px;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
+  width: 98%;
   height: 20px;
   padding: 3px;
-  text-align: center;
+  text-align: left;
 }
 
 .titleInput::placeholder {
   color: white;
   opacity: 1;
   text-align: center;
+}
+
+.titleInput:focus {
+  outline: none;
+}
+
+.titleInput:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .itemTitle:hover {
@@ -193,28 +217,28 @@
 }
 
 .itemPathContainer:hover .itemPath {
-  transform: translateX(-100%); /* Scrolls the text to the left */
+  transform: translateX(-100%);
 }
 
 .itemPathContainer::after {
-  content: ""; /* Empty content for the overlay */
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
-  width: 50px; /* Adjust the width of the fade-out effect */
+  width: 50px;
   height: 100%;
   background: linear-gradient(
     to left,
     #8000ff,
     transparent
-  ); /* Fade-out effect */
-  pointer-events: none; /* Ensures the overlay doesn't block interactions */
+  );
+  pointer-events: none;
 }
 
 @keyframes flashRed {
   0%,
   100% {
-    background-color: #1c272d; /* Original background color */
+    background-color: #1c272d;
   }
   50% {
     background-color: red;
@@ -222,5 +246,5 @@
 }
 
 .flashRed {
-  animation: flashRed 0.5s ease-in-out 2; /* Flash twice */
+  animation: flashRed 0.5s ease-in-out 2;
 }

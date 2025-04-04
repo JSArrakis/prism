@@ -35,6 +35,22 @@ export const useDeleteMovie = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["movies"] });
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
+    },
+  });
+};
+
+export const useUpdateMovie = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (
+      body: PrismMediaItem
+    ): Promise<{ message: string; status: number }> => {
+      return await window.electron.updateMovieHandler(body);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["movies"] });
+      queryClient.invalidateQueries({ queryKey: ["collections"] });
     },
   });
 };

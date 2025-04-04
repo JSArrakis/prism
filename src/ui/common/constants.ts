@@ -1,9 +1,9 @@
 export const TAG_CATEGORIES = {
   ALL: "All",
-  AGE_GROUP: "Age Group",
   GENRE: "Genre",
   AESTHETIC: "Aesthetic",
   SPECIALTY: "Specialty",
+  AGE_GROUP: "Age Group",
   ERA: "Era",
   HOLIDAY: "Holiday",
 };

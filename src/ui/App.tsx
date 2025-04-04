@@ -6,6 +6,7 @@ import "./App.css";
 const queryClient = new QueryClient();
 
 export default function App() {
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -19,6 +20,7 @@ export default function App() {
           }}
         >
           <RootStackNavigator />
+          <div id="scrollbar-corner-overlay" />
         </div>
       </Router>
     </QueryClientProvider>

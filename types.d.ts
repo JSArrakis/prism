@@ -62,6 +62,7 @@ type EventPayloadMapping = {
   getMovies: Promise<PrismMediaItem[]>;
   createMovie: Promise<{ message: string; status: number }>;
   deleteMovie: Promise<{ message: string; status: number }>;
+  updateMovie: Promise<{ message: string; status: number }>;
   getAestheticTags: Promise<Tag[]>;
   createAestheticTag: Promise<{ message: string; status: number }>;
   deleteAestheticTag: Promise<{ message: string; status: number }>;
@@ -94,6 +95,9 @@ interface Window {
       movie: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
     deleteMovieHandler: (
+      movie: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updateMovieHandler: (
       movie: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
     getAestheticTagsHandler: () => Promise<Tag[]>;

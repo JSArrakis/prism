@@ -5,6 +5,7 @@ import {
   useCreateMovie,
   useDeleteMovie,
   useGetAllMovies,
+  useUpdateMovie,
 } from "../../../services/media";
 
 interface MoviesData {
@@ -28,6 +29,7 @@ const useMoviesViewModel = (
   const $getMovies = useGetAllMovies();
   const $createMovie = useCreateMovie();
   const $deleteMovie = useDeleteMovie();
+  const $updateMovie = useUpdateMovie();
 
   const [savedMovies, setSavedMovies] = useState<PrismMediaItem[]>([]);
 
@@ -95,12 +97,29 @@ const useMoviesViewModel = (
   };
 
   const saveMovie = (movie: PrismMediaItem) => {
-    console.log("Saving movie:", movie);
+    const deepCopiedMovie = JSON.parse(JSON.stringify(movie));
+    console.log("Saving movie:", deepCopiedMovie);
+    const existingMovie = savedMovies.find(
+      (m) => m.mediaItemId === deepCopiedMovie.mediaItemId
+    );
+
+    console.log("Existing movie:", existingMovie);
+
+    if (existingMovie) {
+      $updateMovie.mutate(deepCopiedMovie);
+      setSelectedMovie(null);
+      setEditModalState(false);
+      setNewMovies((prev) =>
+        prev.filter((m) => m.mediaItemId !== deepCopiedMovie.mediaItemId)
+      );
+      return;
+    }
+    setSelectedMovie(null);
     setEditModalState(false);
     setNewMovies((prev) =>
-      prev.filter((m) => m.mediaItemId !== movie.mediaItemId)
+      prev.filter((m) => m.mediaItemId !== deepCopiedMovie.mediaItemId)
     );
-    $createMovie.mutate(movie);
+    $createMovie.mutate(deepCopiedMovie);
   };
 
   const searchMovies = (searchTerm: string) => {

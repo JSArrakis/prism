@@ -124,7 +124,7 @@ export async function updateCollectionHandler(
       hostname: "localhost",
       port: 3001,
       path: "/api/admin/v1/update-collection",
-      method: "PUT", // Changed from POST to PUT
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Content-Length": data.length,

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu } from "electron";
+import { app, BrowserWindow } from "electron";
 import { ipcMainHandle, isDev } from "./util.js";
 import { getPreloadPath, getUIPath } from "./pathResolver.js";
 import { openFileDialogHandler } from "./handlers/commonHanlders.js";
@@ -12,6 +12,7 @@ import {
   createMovieHandler,
   deleteMovieHandler,
   getMoviesHandler,
+  updateMovieHandler,
 } from "./handlers/movieHandlers.js";
 import {
   createAestheticTagHandler,
@@ -81,6 +82,9 @@ app.on("ready", () => {
   });
   ipcMainHandle("deleteMovie", async (_event: any, movie: PrismMediaItem) => {
     return await deleteMovieHandler(movie);
+  });
+  ipcMainHandle("updateMovie", async (_event: any, movie: PrismMediaItem) => {
+    return await updateMovieHandler(movie);
   });
 
   ipcMainHandle("getAestheticTags", async () => {

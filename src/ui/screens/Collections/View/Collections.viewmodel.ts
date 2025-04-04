@@ -95,20 +95,20 @@ const useCollectionsViewModel = (
   };
 
   const onSave = (item: PrismCurationObj) => {
-    const deepCopiedSelectedCollection = JSON.parse(
-      JSON.stringify(item)
-    );
+    const deepCopiedSelectedCollection = JSON.parse(JSON.stringify(item));
     const existingCollection = collections.find(
       (c) => c.mediaItemId === deepCopiedSelectedCollection.mediaItemId
     );
     if (existingCollection) {
       $updateCollection.mutate(deepCopiedSelectedCollection);
       setSelectedCollection(null);
+      setNewCollection(null);
       setEditModalState(false);
       return;
     }
     $createCollection.mutate(deepCopiedSelectedCollection);
     setSelectedCollection(null);
+    setNewCollection(null);
     setEditModalState(false);
   };
 

@@ -80,7 +80,6 @@
   justify-content: center;
   cursor: pointer;
   background: linear-gradient(330deg, #2ab7fe, #582afe);
-  /* background: linear-gradient(330deg, #ff9d00, #b0261c); */
   height: 24px;
   width: 24px;
   border-radius: 5px;
@@ -195,28 +194,28 @@
 }
 
 .itemPathContainer:hover .itemPath {
-  transform: translateX(-100%); /* Scrolls the text to the left */
+  transform: translateX(-100%);
 }
 
 .itemPathContainer::after {
-  content: ""; /* Empty content for the overlay */
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
-  width: 50px; /* Adjust the width of the fade-out effect */
+  width: 50px;
   height: 100%;
   background: linear-gradient(
     to left,
     #8000ff,
     transparent
-  ); /* Fade-out effect */
-  pointer-events: none; /* Ensures the overlay doesn't block interactions */
+  );
+  pointer-events: none;
 }
 
 @keyframes flashRed {
   0%,
   100% {
-    background-color: #1c272d; /* Original background color */
+    background-color: #1c272d;
   }
   50% {
     background-color: red;
@@ -224,5 +223,5 @@
 }
 
 .flashRed {
-  animation: flashRed 0.5s ease-in-out 2; /* Flash twice */
+  animation: flashRed 0.5s ease-in-out 2;
 }

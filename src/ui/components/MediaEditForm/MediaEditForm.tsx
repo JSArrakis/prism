@@ -1,9 +1,7 @@
 import { FC, useState, useRef, useEffect } from "react";
-import fuzzysort from "fuzzysort";
 import styles from "./MediaEditForm.module.css";
 import { getFileName } from "../../common/helpers";
 import { TAG_CATEGORIES } from "../../common/constants";
-import useDebounce from "../../hooks/useDebounce";
 import SavedCollectionItem from "./SavedCollectionItem/SavedCollectionItem";
 import { useGetAllAestheticTags } from "../../services/tags/useAestheticTags";
 import { useGetAllEraTags } from "../../services/tags/useEraTags";
@@ -64,12 +62,12 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
 
   useEffect(() => {
     setAllTags([
+      ...genreTags,
       ...aestheticTags,
+      ...specialtyTags,
       ...ageGroupTags,
       ...eraTags,
-      ...genreTags,
       ...holidayTags,
-      ...specialtyTags,
     ]);
   }, [
     aestheticTags,
@@ -83,7 +81,12 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   // #endregion
 
   const [tagListSearchTerm, setTagListSearchTerm] = useState("");
-
+  const [currentSelectedTagList, setCurrentSelectedTagList] = useState<
+    string[]
+  >([]);
+  const [isFlashing, setIsFlashing] = useState(false);
+  const [currentSelectedCategory, setCurrentSelectedCategory] =
+    useState<string>(TAG_CATEGORIES.ALL);
   const [tagChipList, setTagChipList] = useState<string[]>([]);
   const [selectedTagList, setSelectedTagList] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>(
@@ -99,49 +102,63 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   const searchTagsRef = useRef<HTMLInputElement>(null);
   const collectionListRef = useRef<HTMLDivElement>(null);
 
-  const onSearch = (searchTerm: string) => {
-    if (!searchTerm) {
-      setSelectedTagList(allTags.map((tag) => tag.name));
+  useEffect(() => {
+    if (tagListSearchTerm.trim() === "") {
+      setSelectedTagList(currentSelectedTagList);
+      setSelectedCategory(currentSelectedCategory);
       return;
     }
-    const results = fuzzysort.go(
-      searchTerm,
-      allTags.map((tag) => tag.name),
-      {
-        threshold: -1000,
-        limit: 50,
-      }
-    );
-    setSelectedTagList(results.map((result) => result.target));
-  };
-  const debouncedSearch = useDebounce(onSearch, 1000);
 
-  useEffect(() => {
-    debouncedSearch(tagListSearchTerm);
-  }, [tagListSearchTerm, debouncedSearch]);
+    const debouncedSearch = setTimeout(() => {
+      setSelectedCategory(TAG_CATEGORIES.ALL);
+      const searchTerm = tagListSearchTerm.toLowerCase();
+      const filteredList = allTags
+        .filter(
+          (item) => item.name && item.name.toLowerCase().includes(searchTerm)
+        )
+        .map((tag) => tag.name);
+      setSelectedTagList(filteredList);
+    }, 600);
+
+    return () => clearTimeout(debouncedSearch);
+  }, [tagListSearchTerm, allTags]);
 
   useEffect(() => {
     switch (selectedCategory) {
       case TAG_CATEGORIES.AGE_GROUP:
         setSelectedTagList(ageGroupTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(ageGroupTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.AGE_GROUP);
         break;
       case TAG_CATEGORIES.GENRE:
         setSelectedTagList(genreTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(genreTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.GENRE);
         break;
       case TAG_CATEGORIES.AESTHETIC:
         setSelectedTagList(aestheticTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(aestheticTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.AESTHETIC);
         break;
       case TAG_CATEGORIES.SPECIALTY:
         setSelectedTagList(specialtyTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(specialtyTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.SPECIALTY);
         break;
       case TAG_CATEGORIES.ERA:
         setSelectedTagList(eraTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(eraTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.ERA);
         break;
       case TAG_CATEGORIES.HOLIDAY:
         setSelectedTagList(holidayTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(holidayTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.HOLIDAY);
         break;
       default:
         setSelectedTagList(allTags.map((tag) => tag.name));
+        setCurrentSelectedTagList(allTags.map((tag) => tag.name));
+        setCurrentSelectedCategory(TAG_CATEGORIES.ALL);
         break;
     }
   }, [
@@ -156,13 +173,22 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   ]);
 
   const handleSave = () => {
+    if (!title.trim()) {
+      setIsFlashing(true);
+      setTimeout(() => setIsFlashing(false), 1000);
+      return;
+    }
+
+    const newTags = tagChipList.length > 0 ? tagChipList : ["Default"];
+
     const updatedItem: PrismMediaItem = {
       ...item,
       title,
       alias,
       imdb,
-      tags: tagChipList,
+      tags: newTags,
     };
+
     onSave(updatedItem);
   };
 
@@ -187,11 +213,6 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
     e.target.classList.remove(styles.hidePlaceholder);
   };
 
-  const handleEditSaveCollectionItem = (
-    id: string,
-    sequence: number | null
-  ) => {};
-
   return (
     <div className={styles.simpleItemEditContainer}>
       <div className={styles.editModalHeader}>
@@ -203,16 +224,20 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
           <span className="material-symbols-rounded">close</span>
         </div>
       </div>
-      <div className={styles.editModalFile}>
-        <div className={styles.editInputLabel}>File:</div>
-        <div className={styles.editInputFileName}>{getFileName(item.path)}</div>
+      <div className={styles.fileContainer}>
+        <div className={styles.fileLabel}>File:</div>
+        <div className={styles.fileNameContainer}>
+          <div className={styles.fileName}>{getFileName(item.path)}</div>
+        </div>
       </div>
       <div className={styles.topBody}>
         <div className={styles.mediaLabels}>
           <div className={styles.editModalTitle}>
-            <div className={styles.editInputLabel}>TItle:</div>
+            <div className={styles.fileLabel}>TItle:</div>
             <input
-              className={styles.editInputField}
+              className={`${styles.editInputField} ${
+                isFlashing ? styles.flashRed : ""
+              }`}
               type="text"
               placeholder="MEDIA TITLE"
               value={title}
@@ -223,7 +248,7 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
             />
           </div>
           <div className={styles.editModalAlias}>
-            <div className={styles.editInputLabel}>Alias:</div>
+            <div className={styles.fileLabel}>Alias:</div>
             <input
               className={styles.editInputField}
               type="text"
@@ -236,7 +261,7 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
             />
           </div>
           <div className={styles.editModalImdb}>
-            <div className={styles.editInputLabel}>IMDB:</div>
+            <div className={styles.fileLabel}>IMDB:</div>
             <input
               className={styles.editInputField}
               type="text"
@@ -274,10 +299,7 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
           </div>
         </div>
         <div className={styles.collectionContainer}>
-          <div
-            className={styles.collectionSavedSwitch}
-            onClick={() => {}}
-          >
+          <div className={styles.collectionSavedSwitch} onClick={() => {}}>
             <div className={styles.collectionSavedSwitchLabel}>COLLECTIONS</div>
           </div>
           <div className={styles.collectionSwitchContainer}>
@@ -286,7 +308,6 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
                 <SavedCollectionItem
                   key={collection.curationRefId}
                   collectionRef={collection}
-                  onSave={handleEditSaveCollectionItem}
                 />
               ))}
             </div>
@@ -321,8 +342,15 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
         </div>
       </div>
       <div className={styles.editModalId}>
-        <div className={styles.idLabel}>id:</div>
-        <div className={styles.idValue}>{item.mediaItemId}</div>
+        <div className={styles.mediaIdContainer}>
+          <div className={styles.idLabel}>id:</div>
+          <div className={styles.idValueContainer}>
+            <div className={styles.idValue}>{item.mediaItemId}</div>
+          </div>
+        </div>
+        <div className={styles.saveButton} onClick={() => handleSave()}>
+          SAVE
+        </div>
       </div>
     </div>
   );

@@ -114,7 +114,7 @@
   justify-content: space-between;
 }
 
-.simpleButton {
+.saveButton {
   background: linear-gradient(330deg, #8000ff, #ff00b3);
   color: white;
   font-weight: bold;

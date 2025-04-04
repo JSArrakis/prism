@@ -76,20 +76,23 @@ const MediaListItem: FC<MediaListItemProps> = ({
       </div>
       <div className={styles.itemContent}>
         {hasIncomingTitle ? (
-          <div className={styles.itemTitle}>{title}</div>
+          <div className={styles.itemTitleContainer}>
+            <div className={styles.itemTitle}>{title}</div>
+          </div>
         ) : (
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            placeholder="ENTER TITLE"
-            className={`${styles.titleInput} ${
-              isFlashing ? styles.flashRed : ""
-            }`}
-          />
+          <div className={styles.titleInputContainer}>
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              placeholder="ENTER TITLE"
+              className={`${styles.titleInput} ${
+                isFlashing ? styles.flashRed : ""
+              }`}
+            />
+          </div>
         )}
         <div className={styles.itemPathContainer}>
-          <div></div>
           <div className={styles.itemPath}>{getFileName(item.path)}</div>
         </div>
       </div>

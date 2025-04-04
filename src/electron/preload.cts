@@ -14,6 +14,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
     await ipcInvoke("createMovie", movie),
   deleteMovieHandler: async (movie: PrismMediaItem) =>
     await ipcInvoke("deleteMovie", movie),
+  updateMovieHandler: async (movie: PrismMediaItem) =>
+    await ipcInvoke("updateMovie", movie),
   getAestheticTagsHandler: async () => await ipcInvoke("getAestheticTags"),
   createAestheticTagHandler: async (tag: Tag) =>
     await ipcInvoke("createAestheticTag", tag),

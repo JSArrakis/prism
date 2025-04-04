@@ -20,7 +20,6 @@
   justify-content: center;
   cursor: pointer;
   background: linear-gradient(330deg, #2ab7fe, #582afe);
-  /* background: linear-gradient(330deg, #ff9d00, #b0261c); */
   height: 24px;
   width: 24px;
   border-radius: 5px;
@@ -78,7 +77,6 @@
   justify-content: center;
   cursor: pointer;
   background: linear-gradient(330deg, #2ab7fe, #582afe);
-  /* background: linear-gradient(330deg, #ff9d00, #b0261c); */
   height: 24px;
   width: 24px;
   border-radius: 5px;
@@ -217,7 +215,7 @@
 @keyframes flashRed {
   0%,
   100% {
-    background-color: #1c272d; /* Original background color */
+    background-color: #1c272d;
   }
   50% {
     background-color: red;

@@ -54,9 +54,6 @@ const MediaItemList: FC<MediaItemListProps> = ({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {/* <div className={styles.searchButton}>
-            <span className="material-symbols-rounded">search</span>
-          </div> */}
         </div>
       </div>
       <div className={styles.mediaList}>

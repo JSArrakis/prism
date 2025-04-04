@@ -78,8 +78,16 @@ const CurationEditForm: FC<CurationEditFormProps> = ({
           (item) => item.mediaItemId === media.mediaItemId
         )
     );
-    console.log("Filtered Media List:", filteredMediaList);
-    setFilteredMediaList(filteredMediaList);
+    if (mediaListSearchTerm.trim() === "") {
+      setFilteredMediaList(filteredMediaList);
+      return;
+    } else {
+      const searchTerm = mediaListSearchTerm.toLowerCase();
+      const filteredList = filteredMediaList.filter(
+        (item) => item.title && item.title.toLowerCase().includes(searchTerm)
+      );
+      setFilteredMediaList(filteredList);
+    }
   }, [currentItemCurationList]);
 
   // ============== List Controls ==============
@@ -271,7 +279,7 @@ const CurationEditForm: FC<CurationEditFormProps> = ({
           onBlur={handleBlur}
           ref={searchMediaRef}
         />
-        <div className={styles.simpleButton} onClick={() => handleSave()}>
+        <div className={styles.saveButton} onClick={() => handleSave()}>
           SAVE
         </div>
       </div>

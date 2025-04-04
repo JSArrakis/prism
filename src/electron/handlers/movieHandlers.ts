@@ -114,3 +114,45 @@ export async function deleteMovieHandler(
     req.end();
   });
 }
+
+export async function updateMovieHandler(
+  movie: PrismMediaItem
+): Promise<{ message: string; status: number }> {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(movie);
+    const options = {
+      hostname: "localhost",
+      port: 3001,
+      path: "/api/admin/v1/update-movie",
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": data.length,
+      },
+    };
+
+    const req = http.request(options, (res) => {
+      let responseData = "";
+
+      res.on("data", (chunk) => {
+        responseData += chunk;
+      });
+
+      res.on("end", () => {
+        try {
+          const response = JSON.parse(responseData);
+          resolve({ message: response.message, status: res.statusCode || 200 });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+
+    req.on("error", (error) => {
+      reject(error);
+    });
+
+    req.write(data);
+    req.end();
+  });
+}
