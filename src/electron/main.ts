@@ -14,6 +14,7 @@ import {
   getMoviesHandler,
   updateMovieHandler,
 } from "./handlers/movieHandlers.js";
+import { createShowHandler, deleteShowHandler, getShowsHandler, updateShowHandler } from "./handlers/showHandlers.js";
 import {
   createAestheticTagHandler,
   deleteAestheticTagHandler,
@@ -86,7 +87,18 @@ app.on("ready", () => {
   ipcMainHandle("updateMovie", async (_event: any, movie: PrismMediaItem) => {
     return await updateMovieHandler(movie);
   });
-
+  ipcMainHandle("getShows", async () => {
+    return await getShowsHandler();
+  });
+  ipcMainHandle("createShow", async (_event: any, show: PrismMediaItem) => {
+    return await createShowHandler(show);
+  });
+  ipcMainHandle("deleteShow", async (_event: any, show: PrismMediaItem) => {
+    return await deleteShowHandler(show);
+  });
+  ipcMainHandle("updateShow", async (_event: any, show: PrismMediaItem) => {
+    return await updateShowHandler(show);
+  });
   ipcMainHandle("getAestheticTags", async () => {
     return await getAestheticTagsHandler();
   });

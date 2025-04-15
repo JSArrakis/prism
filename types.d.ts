@@ -17,11 +17,14 @@ type PrismMediaItem = {
   alias?: string;
   imdb?: string;
   tags: string[];
-  path: string;
+  path?: string;
   duration?: number;
   durationLimit?: number;
+  overDuration?: boolean;
+  firstEpisodeOverDuration?: boolean;
   collections?: PrismCurationReference[];
   blocks?: PrismCurationReference[];
+  episodeCount?: number;
   episodes?: PrismEpisodeItem[];
 };
 
@@ -34,8 +37,12 @@ type PrismCurationReference = {
 type PrismEpisodeItem = {
   mediaItemId: string;
   title: string;
-  alias?: string;
-  imdb?: string;
+  season?: number;
+  episode?: number;
+  episodeNumber?: number;
+  path: string;
+  duration?: number;
+  durationLimit?: number;
   tags: string[];
 };
 
@@ -63,6 +70,10 @@ type EventPayloadMapping = {
   createMovie: Promise<{ message: string; status: number }>;
   deleteMovie: Promise<{ message: string; status: number }>;
   updateMovie: Promise<{ message: string; status: number }>;
+  getShows: Promise<PrismMediaItem[]>;
+  createShow: Promise<{ message: string; status: number }>;
+  deleteShow: Promise<{ message: string; status: number }>;
+  updateShow: Promise<{ message: string; status: number }>;
   getAestheticTags: Promise<Tag[]>;
   createAestheticTag: Promise<{ message: string; status: number }>;
   deleteAestheticTag: Promise<{ message: string; status: number }>;
@@ -98,6 +109,16 @@ interface Window {
       movie: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
     updateMovieHandler: (
+      movie: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    getShowsHandler: () => Promise<PrismMediaItem[]>;
+    createShowHandler: (
+      movie: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    deleteShowHandler: (
+      movie: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updateShowHandler: (
       movie: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
     getAestheticTagsHandler: () => Promise<Tag[]>;

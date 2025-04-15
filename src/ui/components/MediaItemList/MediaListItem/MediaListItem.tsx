@@ -43,6 +43,8 @@ const MediaListItem: FC<MediaListItemProps> = ({
       return;
     }
 
+    console.log("Saving title:", title);
+
     const tags: string[] = [DEFAULT_TAG];
     onSave({ ...item, title, tags });
   };
@@ -92,9 +94,11 @@ const MediaListItem: FC<MediaListItemProps> = ({
             />
           </div>
         )}
-        <div className={styles.itemPathContainer}>
-          <div className={styles.itemPath}>{getFileName(item.path)}</div>
-        </div>
+        {item.path && (
+          <div className={styles.itemPathContainer}>
+            <div className={styles.itemPath}>{getFileName(item.path)}</div>
+          </div>
+        )}
       </div>
       <div className={styles.actionsRow}>
         {!hasIncomingTitle && (

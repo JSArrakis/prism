@@ -3,7 +3,6 @@ import styles from "./MediaItemList.module.css";
 import MediaListItem from "./MediaListItem/MediaListItem";
 import MediaEditForm from "../MediaEditForm/MediaEditForm";
 import Modal from "../Modal/Modal";
-import useDebounce from "../../hooks/useDebounce";
 
 interface MediaItemListProps {
   mediaList: PrismMediaItem[];
@@ -28,17 +27,17 @@ const MediaItemList: FC<MediaItemListProps> = ({
 }) => {
   const [mediaListSearchTerm, setMediaListSearchTerm] = useState("");
   const searchMediaItemsRef = useRef<HTMLInputElement>(null);
-  const [filteredCurationList, setFilterCurationList] =
+  const [filteredMediaList, setFilteredMediaList] =
     useState<PrismMediaItem[]>(mediaList);
 
   useEffect(() => {
-    setFilterCurationList(mediaList);
+    setFilteredMediaList(mediaList);
     setMediaListSearchTerm("");
   }, [mediaList]);
 
   useEffect(() => {
     if (mediaListSearchTerm.trim() === "") {
-      setFilterCurationList(mediaList);
+      setFilteredMediaList(mediaList);
       return;
     }
 
@@ -47,7 +46,7 @@ const MediaItemList: FC<MediaItemListProps> = ({
       const filteredList = mediaList.filter(
         (item) => item.title && item.title.toLowerCase().includes(searchTerm)
       );
-      setFilterCurationList(filteredList);
+      setFilteredMediaList(filteredList);
     }, 600);
 
     return () => clearTimeout(debouncedSearch);
@@ -73,7 +72,7 @@ const MediaItemList: FC<MediaItemListProps> = ({
         </div>
       </div>
       <div className={styles.mediaList}>
-        {filteredCurationList.map((item) => (
+        {filteredMediaList.map((item) => (
           <MediaListItem
             key={item.mediaItemId}
             item={item}
@@ -93,7 +92,6 @@ const MediaItemList: FC<MediaItemListProps> = ({
           <MediaEditForm
             item={selectedItem}
             itemType={type}
-            onRemove={onRemove}
             onSave={onSave}
             onCancel={onEdit}
           />

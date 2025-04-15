@@ -1,4 +1,4 @@
-.savedCollectionListItem {
+.curationItem {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -19,7 +19,7 @@
   width: calc(100% - 12px);
 }
 
-.savedCollectionName {
+.curationName {
   display: flex;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -30,7 +30,7 @@
   font-weight: bold;
 }
 
-.savedCollectioneditable {
+.curationSequenceContainer {
   display: flex;
   flex-direction: row;
   align-items: center;

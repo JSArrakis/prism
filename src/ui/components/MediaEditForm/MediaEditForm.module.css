@@ -68,27 +68,34 @@
   right: 0;
   width: 50px;
   height: 100%;
-  background: linear-gradient(
-    to left,
-    #1c272d,
-    transparent
-  );
+  background: linear-gradient(to left, #1c272d, transparent);
   pointer-events: none;
 }
 
 .fileLabel {
   width: 50px;
   min-width: 50px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .editInputField {
   width: 100%;
-  height: 18px;
+  height: 25px;
   background: #2e3b44;
   color: white;
   border: none;
   border-radius: 5px;
   padding: 0 5px;
+}
+
+.editInputField:focus {
+  outline: none;
+}
+
+.editInputField:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .editInputField::placeholder {
@@ -100,33 +107,20 @@
   flex-direction: row;
 }
 
-.topBody {
+.topContainer {
   display: flex;
   flex-direction: row;
 }
 
-.editModalTitle {
-  display: flex;
-  flex-direction: column;
-}
-
+.editModalTitle,
+.editModalAlias,
 .editModalImdb {
   margin-top: 7px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
-.editModalAlias {
-  margin-top: 7px;
-  display: flex;
-  flex-direction: row;
-}
-
-.editModalTitle {
-  margin-top: 7px;
-  display: flex;
-  flex-direction: row;
-}
 .mediaLabels {
   width: calc(48% - 4px);
   min-width: 250px;
@@ -135,7 +129,7 @@
   margin-right: 4px;
 }
 
-.collectionContainer {
+.curationContainer {
   flex-grow: 1;
   flex-shrink: 1;
   display: flex;
@@ -146,17 +140,16 @@
   overflow: hidden;
 }
 
-.collectionSavedSwitch {
+.curationLabel {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 84px;
+  height: 80px;
   width: 25px;
   min-width: 25px;
   margin-right: 5px;
   margin-top: 7px;
-  cursor: pointer;
-  background: linear-gradient(330deg, #ff00b3, #aa00aa);
+  background: linear-gradient(330deg, #793f79, #583f79);
   color: white;
   border: none;
   border-radius: 5px;
@@ -165,6 +158,7 @@
   transform: rotate(180deg);
   writing-mode: vertical-rl;
   text-orientation: mixed;
+  user-select: none;
 }
 
 .collectionSavedSwitch:hover {
@@ -176,8 +170,13 @@
   font-size: 5px;
 }
 
-.collectionSavedSwitchLabel {
+.collectionLabel {
   font-size: 11px;
+  font-weight: 600;
+}
+
+.blockLabel {
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -215,7 +214,7 @@
   font-weight: 600;
 }
 
-.collectionSwitchContainer {
+.curationListContainer {
   display: flex;
   flex-direction: column;
   width: calc(100% - 23px);
@@ -241,9 +240,9 @@
   padding: 0 5px;
 }
 
-.collectionList {
+.curationList {
   margin-top: 7px;
-  height: 94px;
+  height: 89px;
   width: 100%;
   background: #2e3b44;
   color: white;
@@ -255,37 +254,38 @@
   padding: 2px;
 }
 
-.collectionList::-webkit-scrollbar {
+.curationList::-webkit-scrollbar {
   width: 12px;
 }
 
-.collectionList::-webkit-scrollbar-track {
+.curationList::-webkit-scrollbar-track {
   background: #2e3b44;
   border-radius: 5px;
 }
 
-.collectionList::-webkit-scrollbar-thumb {
+.curationList::-webkit-scrollbar-thumb {
   background: #5d00ff;
   border-radius: 5px;
 }
 
-.collectionList::-webkit-scrollbar-thumb:hover {
+.curationList::-webkit-scrollbar-thumb:hover {
   background: deepskyblue;
 }
 
-.tagsContainer {
+.bottomContainer {
   display: flex;
   flex-direction: column;
   margin-top: 7px;
 }
 
 .tagListHeader {
-  margin-top: 7px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .tagListContainer {
+  margin-top: 7px;
   display: flex;
   flex-direction: row;
 }
@@ -293,11 +293,13 @@
 .tagsLabel {
   width: 50px;
   min-width: 50px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .dropdown {
-  width: 90px;
-  height: 18px;
+  width: 120px;
+  height: 25px;
   background: #2e3b44;
   color: white;
   border: none;
@@ -306,8 +308,8 @@
 }
 
 .tagListSearchInput {
-  width: 100%;
-  height: 18px;
+  width: 300px;
+  height: 25px;
   background: #2e3b44;
   color: white;
   border: none;
@@ -322,7 +324,7 @@
 .tagList {
   width: 200px;
   min-width: 200px;
-  height: 100px;
+  height: 120px;
   margin-right: 7px;
   background: #2e3b44;
   color: white;
@@ -336,7 +338,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90px;
+  height: 110px;
   width: 32px;
   min-width: 32px;
   margin-right: 7px;
@@ -354,7 +356,7 @@
 }
 
 .tagChipList {
-  height: 90px;
+  height: 110px;
   width: 100%;
   background: #2e3b44;
   color: white;
@@ -462,17 +464,13 @@
 }
 
 .idValueContainer::after {
-  content: ""; 
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
   width: 50px;
   height: 100%;
-  background: linear-gradient(
-    to left,
-    #1c272d,
-    transparent
-  );
+  background: linear-gradient(to left, #1c272d, transparent);
   pointer-events: none;
 }
 
@@ -487,16 +485,46 @@
   color: transparent;
 }
 
+.toggleButton,
 .saveButton {
   flex-shrink: 0;
-  background: linear-gradient(330deg, #8000ff, #ff00b3);
+  background: linear-gradient(330deg, #8000ff, #aa00aa);
   color: white;
   font-weight: bold;
   border: none;
   border-radius: 5px;
-  padding: 4px 25px;
   margin: 0;
+  width: 80px;
+  height: 25px;
   cursor: pointer;
+  text-align: center;
+  align-content: center;
+  font-size: 14px;
+}
+
+.toggleButton {
+  width: 100px;
+  margin-right: 7px;
+}
+
+.toggleButton:hover,
+.saveButton:hover {
+  background: deepskyblue;
+}
+
+.disabledButton {
+  flex-shrink: 0;
+  background: linear-gradient(330deg, #793f79, #583f79);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  margin-right: 7px;
+  width: 100px;
+  height: 25px;
+  text-align: center;
+  align-content: center;
+  font-size: 14px;
 }
 
 @keyframes scroll {
@@ -520,4 +548,101 @@
 
 .flashRed {
   animation: flashRed 0.5s ease-in-out 2;
+}
+
+.episodesContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.episodesHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.episodeList {
+  height: 120px;
+  width: 100%;
+  background: #2e3b44;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  margin-top: 7px;
+}
+
+.episodeList::-webkit-scrollbar {
+  width: 12px;
+}
+
+.episodeList::-webkit-scrollbar-track {
+  background: #2e3b44;
+  border-radius: 5px;
+}
+
+.episodeList::-webkit-scrollbar-thumb {
+  background: #5d00ff;
+  border-radius: 5px;
+}
+
+.episodeList::-webkit-scrollbar-thumb:hover {
+  background: deepskyblue;
+}
+
+.addEpisodeContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+}
+
+.addItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  cursor: pointer;
+  background: linear-gradient(330deg, #bb00ff, #8000ff, #5d00ff);
+  height: 24px;
+  width: 24px;
+  border-radius: 5px;
+}
+
+.addItem:hover {
+  background: deepskyblue;
+}
+
+.searchEpisodesContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+}
+
+.searchEpisodeInput {
+  width: 300px;
+  height: 25px;
+  background: #2e3b44;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+.searchEpisodeInput::placeholder {
+  opacity: 1;
+  text-align: center;
+}
+
+.searchEpisodeInput:focus {
+  outline: none;
+}
+
+.searchEpisodeInput:focus::placeholder {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
 }
