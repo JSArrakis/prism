@@ -37,8 +37,8 @@ type PrismCurationReference = {
 type PrismEpisodeItem = {
   mediaItemId: string;
   title: string;
-  season?: number;
-  episode?: number;
+  season?: string;
+  episode?: string;
   episodeNumber?: number;
   path: string;
   duration?: number;

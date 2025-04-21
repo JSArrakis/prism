@@ -1,11 +1,10 @@
-import { FC, useRef, useState } from "react";
+import { FC, use, useEffect, useRef, useState } from "react";
 import styles from "./Episode.module.css";
 import { getFileName } from "../../../common/helpers";
 
 interface EpisodeProps {
   episode: PrismEpisodeItem;
   onEdit: (item: PrismEpisodeItem) => void;
-  onSave: (item: PrismEpisodeItem) => void;
   onRemoveEpisode: (item: PrismEpisodeItem) => void;
   onUpdateSequence: (item: PrismEpisodeItem, sequence: number | null) => void;
 }
@@ -14,12 +13,14 @@ const Episode: FC<EpisodeProps> = ({
   episode,
   onUpdateSequence,
   onRemoveEpisode,
-
   onEdit,
-  onSave,
 }) => {
   const episodeSequenceRef = useRef<HTMLInputElement>(null);
-  const [title, setTitle] = useState(episode.title || "");
+  const [title, setTitle] = useState<string>();
+
+  useEffect(() => {
+    setTitle(episode.title || "");
+  }, [episode.title]);
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.classList.add(styles.hidePlaceholder);
@@ -51,6 +52,19 @@ const Episode: FC<EpisodeProps> = ({
           <div className={styles.itemPath}>{getFileName(episode.path)}</div>
         </div>
       </div>
+      {(!!episode.season || !!episode.episode) && (
+        <div className={styles.orderContainer}>
+          <div className={styles.orderLabel}>S:</div>
+          <div className={styles.seasonNumber}>
+            {episode.season ? episode.season : "--"}
+          </div>
+          <div className={styles.seperator} />
+          <div className={styles.orderLabel}>E:</div>
+          <div className={styles.episodeNumber}>
+            {episode.episode ? episode.episode : "---"}
+          </div>
+        </div>
+      )}
       <div className={styles.sequenceContainer}>
         <div className={styles.sequenceLabel}> SEQ #</div>
         <input

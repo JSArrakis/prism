@@ -64,6 +64,10 @@
   pointer-events: none;
 }
 
+.titleContainer:hover .title {
+  transform: translateX(-100%);
+}
+
 .title {
   white-space: nowrap;
   padding-left: 3px;
@@ -71,6 +75,7 @@
   color: white;
   font-size: 14px;
   font-weight: bold;
+  transition: transform 10s linear;
 }
 
 .itemPathContainer {
@@ -81,7 +86,6 @@
   justify-content: flex-start;
   flex-grow: 1;
   overflow: hidden;
-  margin-left: 5px;
   flex: 1;
 }
 
@@ -157,6 +161,43 @@
 .removeCollectionRowButton:hover,
 .saveCollectionRowButton:hover {
   background: deepskyblue;
+}
+
+.orderContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+  height: 100%;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.orderLabel {
+  margin-right: 3px;
+  text-align: center;
+}
+
+.seasonNumber {
+  margin-right: 6px;
+  text-align: center;
+  min-width: 15px;
+}
+
+.episdoeNumber {
+  margin-right: 6px;
+  text-align: center;
+  min-width: 20px;
+}
+
+.seperator {
+  width: 2px;
+  height: 50%;
+  background-color: white;
+  margin-right: 6px;
 }
 
 .sequenceNumber {

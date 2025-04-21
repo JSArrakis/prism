@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, use, useEffect, useRef, useState } from "react";
 import styles from "./MediaItemList.module.css";
 import MediaListItem from "./MediaListItem/MediaListItem";
 import MediaEditForm from "../MediaEditForm/MediaEditForm";
@@ -29,6 +29,23 @@ const MediaItemList: FC<MediaItemListProps> = ({
   const searchMediaItemsRef = useRef<HTMLInputElement>(null);
   const [filteredMediaList, setFilteredMediaList] =
     useState<PrismMediaItem[]>(mediaList);
+  const [newTitle, setNewTitle] = useState("");
+  const [hasOriginalTitle, setHasOriginalTitle] = useState(false);
+
+  useEffect(() => {
+    if (selectedItem) {
+      // find the item in the mediaList
+      const item = mediaList.find(
+        (item) => item.mediaItemId === selectedItem.mediaItemId
+      );
+      if (item) {
+        // If item.title is not empty, set hasOriginalTitle to true
+        if (item.title && item.title.trim() !== "") {
+          setHasOriginalTitle(true);
+        }
+      }
+    }
+  }, [selectedItem, mediaList]);
 
   useEffect(() => {
     setFilteredMediaList(mediaList);
@@ -76,6 +93,7 @@ const MediaItemList: FC<MediaItemListProps> = ({
           <MediaListItem
             key={item.mediaItemId}
             item={item}
+            setNewTitle={setNewTitle}
             onEdit={onEdit}
             onSave={onSave}
             onRemove={onRemove}
@@ -92,6 +110,8 @@ const MediaItemList: FC<MediaItemListProps> = ({
           <MediaEditForm
             item={selectedItem}
             itemType={type}
+            incomingTitle={selectedItem.title ? selectedItem.title : newTitle}
+            hasOriginalTitle={hasOriginalTitle}
             onSave={onSave}
             onCancel={onEdit}
           />

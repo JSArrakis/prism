@@ -11,10 +11,13 @@ import { useGetAllAestheticTags } from "../../services/tags/useAestheticTags";
 import { useGetAllEraTags } from "../../services/tags/useEraTags";
 import { useGetAllGenreTags } from "../../services/tags/useGenreTags";
 import { useGetAllSpecialtyTags } from "../../services/tags/useSpecialtyTags";
+import EpisodeEditForm from "./EpisodeEditForm/EpisodeEditForm";
 
 interface MediaEditFormProps {
   item: PrismMediaItem;
   itemType: string;
+  incomingTitle: string;
+  hasOriginalTitle: boolean;
   onSave: (item: PrismMediaItem) => void;
   onCancel: (item: PrismMediaItem) => void;
 }
@@ -22,15 +25,38 @@ interface MediaEditFormProps {
 const MediaEditForm: FC<MediaEditFormProps> = ({
   item,
   itemType,
+  incomingTitle,
+  hasOriginalTitle,
   onSave,
   onCancel,
 }) => {
-  //TODO Prevent duplicate sequence numbers for episodes
+  // +++++++++++++++++++++++++++++++++++++++++++
+  //               Media Labels
+  // +++++++++++++++++++++++++++++++++++++++++++
+
+  const [title, setTitle] = useState("");
+  const [alias, setAlias] = useState(item.alias || "");
+  const [imdb, setImdb] = useState(item.imdb || "");
+  const [isFlashing, setIsFlashing] = useState(false);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const aliasRef = useRef<HTMLInputElement>(null);
+  const imdbRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setTitle(incomingTitle);
+  }, [incomingTitle]);
+
+  // +++++++++++++++++++++++++++++++++++++++++++
+  //                 Media Tags
+  // +++++++++++++++++++++++++++++++++++++++++++
+
+  // =============== Tag Select ================
 
   const $getAllAestheticTags = useGetAllAestheticTags();
   const $getAllEraTags = useGetAllEraTags();
   const $getAllGenreTags = useGetAllGenreTags();
   const $getAllSpecialtyTags = useGetAllSpecialtyTags();
+
   const [aestheticTags, setAestheticTags] = useState<Tag[]>([]);
   const [ageGroupTags, setAgeGroupTags] = useState<Tag[]>([]);
   const [eraTags, setEraTags] = useState<Tag[]>([]);
@@ -81,15 +107,123 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
     specialtyTags,
   ]);
 
-  const [tagListSearchTerm, setTagListSearchTerm] = useState("");
+  const [currentSelectedCategory, setCurrentSelectedCategory] =
+    useState<string>(TAG_CATEGORIES.ALL);
+  const [tagChipList, setTagChipList] = useState<string[]>(item.tags);
+  const [selectedTagList, setSelectedTagList] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    TAG_CATEGORIES.ALL
+  );
   const [currentSelectedTagList, setCurrentSelectedTagList] = useState<
     string[]
   >([]);
+  const tagListRef = useRef<HTMLSelectElement>(null);
+
+  // =============== Tag Search ================
+
+  const [tagListSearchTerm, setTagListSearchTerm] = useState("");
+  const searchTagsRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (tagListSearchTerm.trim() === "") {
+      setSelectedTagList(currentSelectedTagList);
+      setSelectedCategory(currentSelectedCategory);
+      return;
+    }
+
+    const debouncedSearch = setTimeout(() => {
+      setSelectedCategory(TAG_CATEGORIES.ALL);
+      const searchTerm = tagListSearchTerm.toLowerCase();
+      console.log("searchTerm", searchTerm);
+      const filteredList = allTags
+        .filter(
+          (item) => item.name && item.name.toLowerCase().includes(searchTerm)
+        )
+        .map((tag) => tag.name);
+      setSelectedTagList(filteredList);
+    }, 600);
+
+    return () => clearTimeout(debouncedSearch);
+  }, [tagListSearchTerm, allTags]);
+
+  useEffect(() => {
+    if (tagListSearchTerm.trim() === "") {
+      switch (selectedCategory) {
+        case TAG_CATEGORIES.AGE_GROUP:
+          setSelectedTagList(ageGroupTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(ageGroupTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.AGE_GROUP);
+          break;
+        case TAG_CATEGORIES.GENRE:
+          setSelectedTagList(genreTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(genreTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.GENRE);
+          break;
+        case TAG_CATEGORIES.AESTHETIC:
+          setSelectedTagList(aestheticTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(aestheticTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.AESTHETIC);
+          break;
+        case TAG_CATEGORIES.SPECIALTY:
+          setSelectedTagList(specialtyTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(specialtyTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.SPECIALTY);
+          break;
+        case TAG_CATEGORIES.ERA:
+          setSelectedTagList(eraTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(eraTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.ERA);
+          break;
+        case TAG_CATEGORIES.HOLIDAY:
+          setSelectedTagList(holidayTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(holidayTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.HOLIDAY);
+          break;
+        default:
+          setSelectedTagList(allTags.map((tag) => tag.name));
+          setCurrentSelectedTagList(allTags.map((tag) => tag.name));
+          setCurrentSelectedCategory(TAG_CATEGORIES.ALL);
+          break;
+      }
+    }
+  }, [
+    selectedCategory,
+    tagListSearchTerm,
+    allTags,
+    ageGroupTags,
+    genreTags,
+    aestheticTags,
+    specialtyTags,
+    eraTags,
+    holidayTags,
+  ]);
+
+  // ============== Tag Controls ===============
+
+  const handleAddChip = () => {
+    const selectedTag = tagListRef.current?.value;
+
+    if (selectedTag && !tagChipList.includes(selectedTag)) {
+      setTagChipList([...tagChipList, selectedTag]);
+    }
+    setTagListSearchTerm("");
+  };
+
+  const handleRemoveChip = (chip: string) => {
+    setTagChipList(tagChipList.filter((item) => item !== chip));
+  };
+
+  // +++++++++++++++++++++++++++++++++++++++++++
+  //                 Episodes
+  // +++++++++++++++++++++++++++++++++++++++++++
 
   const [displayEpisodes, setDisplayEpisodes] = useState(false);
   const [savedEpisodes, setSavedEpisodes] = useState<PrismEpisodeItem[]>([]);
   const [newEpisodes, setNewEpisodes] = useState<PrismEpisodeItem[]>([]);
   const [episodeList, setEpisodeList] = useState<PrismEpisodeItem[]>([]);
+  const [selectedEpisode, setSelectedEpisode] =
+    useState<PrismEpisodeItem | null>(null);
+  const [showEditEpisodeModal, setShowEditEpisodeModal] = useState(false);
 
   useEffect(() => {
     if (item.episodes) {
@@ -154,100 +288,7 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
     return () => clearTimeout(debouncedSearch);
   }, [episodeSearchTerm, episodeSearchCategory, episodeList]);
 
-  const [isFlashing, setIsFlashing] = useState(false);
-  const [currentSelectedCategory, setCurrentSelectedCategory] =
-    useState<string>(TAG_CATEGORIES.ALL);
-  const [tagChipList, setTagChipList] = useState<string[]>(item.tags);
-  const [selectedTagList, setSelectedTagList] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    TAG_CATEGORIES.ALL
-  );
-  const [title, setTitle] = useState(item.title || "");
-  const [alias, setAlias] = useState(item.alias || "");
-  const [imdb, setImdb] = useState(item.imdb || "");
-  const tagListRef = useRef<HTMLSelectElement>(null);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const aliasRef = useRef<HTMLInputElement>(null);
-  const imdbRef = useRef<HTMLInputElement>(null);
-  const searchTagsRef = useRef<HTMLInputElement>(null);
-  const curationListRef = useRef<HTMLDivElement>(null);
   const searchEpisodesRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (tagListSearchTerm.trim() === "") {
-      setSelectedTagList(currentSelectedTagList);
-      setSelectedCategory(currentSelectedCategory);
-      return;
-    }
-
-    const debouncedSearch = setTimeout(() => {
-      setSelectedCategory(TAG_CATEGORIES.ALL);
-      const searchTerm = tagListSearchTerm.toLowerCase();
-      const filteredList = allTags
-        .filter(
-          (item) => item.name && item.name.toLowerCase().includes(searchTerm)
-        )
-        .map((tag) => tag.name);
-      setSelectedTagList(filteredList);
-    }, 600);
-
-    return () => clearTimeout(debouncedSearch);
-  }, [tagListSearchTerm, allTags]);
-
-  useEffect(() => {
-    switch (selectedCategory) {
-      case TAG_CATEGORIES.AGE_GROUP:
-        setSelectedTagList(ageGroupTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(ageGroupTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.AGE_GROUP);
-        break;
-      case TAG_CATEGORIES.GENRE:
-        setSelectedTagList(genreTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(genreTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.GENRE);
-        break;
-      case TAG_CATEGORIES.AESTHETIC:
-        setSelectedTagList(aestheticTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(aestheticTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.AESTHETIC);
-        break;
-      case TAG_CATEGORIES.SPECIALTY:
-        setSelectedTagList(specialtyTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(specialtyTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.SPECIALTY);
-        break;
-      case TAG_CATEGORIES.ERA:
-        setSelectedTagList(eraTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(eraTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.ERA);
-        break;
-      case TAG_CATEGORIES.HOLIDAY:
-        setSelectedTagList(holidayTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(holidayTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.HOLIDAY);
-        break;
-      default:
-        setSelectedTagList(allTags.map((tag) => tag.name));
-        setCurrentSelectedTagList(allTags.map((tag) => tag.name));
-        setCurrentSelectedCategory(TAG_CATEGORIES.ALL);
-        break;
-    }
-  }, [
-    selectedCategory,
-    allTags,
-    ageGroupTags,
-    genreTags,
-    aestheticTags,
-    specialtyTags,
-    eraTags,
-    holidayTags,
-  ]);
-
-  const handleSectionToggle = () => {
-    if (item.episodes) {
-      setDisplayEpisodes(!displayEpisodes);
-    }
-  };
 
   const onRemoveEpisode = (item: PrismEpisodeItem) => {
     const newEpisodeList: PrismEpisodeItem[] = episodeList.filter(
@@ -270,10 +311,121 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
     setEpisodeList(newEpisodeList);
   };
 
+  const onAddEpisode = async () => {
+    const filePaths = await window.electron.openFileDialogHandler();
+    if (filePaths.length > 0) {
+      const newEpisodes = filePaths.map((episodePath: string) => ({
+        mediaItemId: normalizeItem(episodePath),
+        title: "",
+        path: episodePath,
+        tags: [],
+      }));
+
+      setNewEpisodes((prev) => [...prev, ...newEpisodes]);
+    }
+  };
+
+  const onEditEpisode = (item: PrismEpisodeItem) => {
+    setSelectedEpisode(item);
+    setShowEditEpisodeModal(true);
+  };
+
+  const closeEditEpisode = () => {
+    setShowEditEpisodeModal(false);
+    setSelectedEpisode(null);
+  };
+
+  const onUpdateEpisode = (item: PrismEpisodeItem) => {
+    console.log("ON UPDATE EPISODE", item);
+    // Remove incoming episode from episdodeList
+    const updatedEpisodeList = episodeList.filter(
+      (episode) => episode.mediaItemId !== item.mediaItemId
+    );
+    // Add updated episode to episodeList
+    const newEpisodeList = [...updatedEpisodeList, item];
+    // Sort episodeList by episodeNumber, and put undefined at the beginning
+    // Filter out undefined episodeNumbers
+    const sequencedEpisodes = newEpisodeList.filter(
+      (episode) => episode.episodeNumber !== undefined
+    );
+    // Sort by episodeNumber
+    const sortedEpisodes = sequencedEpisodes.sort(
+      (a, b) => (a.episodeNumber ?? 0) - (b.episodeNumber ?? 0)
+    );
+    // Add back episodes with undefined episodeNumbers
+    const unsortedEpisodes = newEpisodeList.filter(
+      (episode) => episode.episodeNumber === undefined
+    );
+    // Concatenate sorted and unsorted episodes
+    const finalEpisodes = [...unsortedEpisodes, ...sortedEpisodes];
+
+    // Set episodeList
+    setEpisodeList(finalEpisodes);
+    // Close edit episode modal
+    setShowEditEpisodeModal(false);
+    setSelectedEpisode(null);
+  };
+
+  // +++++++++++++++++++++++++++++++++++++++++++
+  //                  General
+  // +++++++++++++++++++++++++++++++++++++++++++
+
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [warningModalMessage, setWarningModalMessage] = useState("");
+  const curationListRef = useRef<HTMLDivElement>(null);
+
+  const handleSectionToggle = () => {
+    if (item.episodes) {
+      setDisplayEpisodes(!displayEpisodes);
+    }
+  };
+
   const handleSave = () => {
     if (!title.trim()) {
       setIsFlashing(true);
       setTimeout(() => setIsFlashing(false), 1000);
+      return;
+    }
+
+    const itemsWithoutSequence = episodeList.filter(
+      (item) =>
+        Number.isNaN(item.episodeNumber) ||
+        item.episodeNumber === null ||
+        item.episodeNumber === undefined
+    );
+
+    const duplicateNumbers = episodeList
+      .map((item) => item.episodeNumber)
+      .filter(
+        (num, index, self) => num !== undefined && self.indexOf(num) !== index
+      );
+
+    const uniqueDuplicateNumbers = [...new Set(duplicateNumbers)];
+
+    if (itemsWithoutSequence.length > 0) {
+      setWarningModalMessage(
+        "Some items are missing a sequence. Please add sequences before saving."
+      );
+      setDisplayEpisodes(true);
+      setEpisodeSearchTerm("");
+      setShowWarningModal(true);
+      setTimeout(() => setShowWarningModal(false), 2000);
+      return;
+    }
+
+    if (uniqueDuplicateNumbers.length > 0) {
+      const displayedDuplicates = uniqueDuplicateNumbers.slice(0, 5);
+      setWarningModalMessage(
+        `Some items have duplicate sequences: ${displayedDuplicates.join(
+          ", "
+        )}${
+          uniqueDuplicateNumbers.length > 5 ? ", ..." : ""
+        }. Please update sequences before saving.`
+      );
+      setDisplayEpisodes(true);
+      setEpisodeSearchTerm("");
+      setShowWarningModal(true);
+      setTimeout(() => setShowWarningModal(false), 2000);
       return;
     }
 
@@ -294,35 +446,26 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
     onSave(updatedItem);
   };
 
-  const handleAddChip = () => {
-    const selectedTag = tagListRef.current?.value;
-
-    if (selectedTag && !tagChipList.includes(selectedTag)) {
-      setTagChipList([...tagChipList, selectedTag]);
-    }
-    setTagListSearchTerm("");
-  };
-
-  const handleRemoveChip = (chip: string) => {
-    setTagChipList(tagChipList.filter((item) => item !== chip));
-  };
-
-  const onAddEpisode = async () => {
-    const filePaths = await window.electron.openFileDialogHandler();
-    if (filePaths.length > 0) {
-      const newEpisodes = filePaths.map((episodePath: string) => ({
-        mediaItemId: normalizeItem(episodePath),
-        title: "",
-        path: episodePath,
-        tags: [],
-      }));
-
-      setNewEpisodes((prev) => [...prev, ...newEpisodes]);
-    }
-  };
+  // +++++++++++++++++++++++++++++++++++++++++++
+  //                   Render
+  // +++++++++++++++++++++++++++++++++++++++++++
 
   return (
     <div className={styles.simpleItemEditContainer}>
+      {showWarningModal && (
+        <div className={styles.warningModal}>{warningModalMessage}</div>
+      )}
+      {showEditEpisodeModal && (
+        <div className={styles.editModalOverlay}>
+          {selectedEpisode && (
+            <EpisodeEditForm
+              episode={selectedEpisode}
+              onUpdateEpisode={onUpdateEpisode}
+              onClose={closeEditEpisode}
+            />
+          )}
+        </div>
+      )}
       <div className={styles.editModalHeader}>
         <div></div>
         <div className={styles.editModalCardTitle}>
@@ -344,16 +487,22 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
         <div className={styles.mediaLabels}>
           <div className={styles.editModalTitle}>
             <div className={styles.fileLabel}>TITLE:</div>
-            <input
-              className={`${styles.editInputField} ${
-                isFlashing ? styles.flashRed : ""
-              }`}
-              type="text"
-              placeholder="MEDIA TITLE"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              ref={titleRef}
-            />
+            {!hasOriginalTitle ? (
+              <input
+                className={`${styles.editInputField} ${
+                  isFlashing ? styles.flashRed : ""
+                }`}
+                type="text"
+                placeholder="MEDIA TITLE"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                ref={titleRef}
+              />
+            ) : (
+              <div className={styles.titleContainer}>
+                <div className={styles.idValue}>{title}</div>
+              </div>
+            )}
           </div>
           <div className={styles.editModalAlias}>
             <div className={styles.fileLabel}>ALIAS:</div>
@@ -455,8 +604,7 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
                       episode={episode}
                       onRemoveEpisode={onRemoveEpisode}
                       onUpdateSequence={onUpdateEpisodeSequence}
-                      onEdit={() => {}}
-                      onSave={() => {}}
+                      onEdit={onEditEpisode}
                     />
                   ))}
                 </div>

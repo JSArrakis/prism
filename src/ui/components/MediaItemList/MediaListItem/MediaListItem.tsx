@@ -4,6 +4,7 @@ import { DEFAULT_TAG } from "../../../common/constants";
 
 interface MediaListItemProps {
   item: PrismMediaItem;
+  setNewTitle: (title: string) => void;
   onEdit: (item: PrismMediaItem) => void;
   onSave: (item: PrismMediaItem) => void;
   onRemove: (item: PrismMediaItem) => void;
@@ -11,6 +12,7 @@ interface MediaListItemProps {
 
 const MediaListItem: FC<MediaListItemProps> = ({
   item,
+  setNewTitle,
   onEdit,
   onSave,
   onRemove,
@@ -34,6 +36,7 @@ const MediaListItem: FC<MediaListItemProps> = ({
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+    setNewTitle(e.target.value);
   };
 
   const handleTitleSave = () => {
