@@ -1,54 +1,54 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useGetAllShorts = () => {
+export const useGetAllMusicVideos = () => {
   return useQuery({
-    queryKey: ["shorts"],
+    queryKey: ["music"],
     queryFn: async () => {
-      return await window.electron.getShortsHandler();
+      return await window.electron.getMusicHandler();
     },
     staleTime: 6 * 60 * 60 * 1000, // 6 hours
     retry: 3,
   });
 };
 
-export const useCreateShort = () => {
+export const useCreateMusicVideo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (
       body: PrismMediaItem
     ): Promise<{ message: string; status: number }> => {
-      return await window.electron.createShortHandler(body);
+      return await window.electron.createMusicHandler(body);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["shorts"] });
+      queryClient.invalidateQueries({ queryKey: ["music"] });
     },
   });
 };
 
-export const useUpdateShort = () => {
+export const useUpdateMusicVideo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (
       body: PrismMediaItem
     ): Promise<{ message: string; status: number }> => {
-      return await window.electron.updateShortHandler(body);
+      return await window.electron.updateMusicHandler(body);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["shorts"] });
+      queryClient.invalidateQueries({ queryKey: ["music"] });
     },
   });
 };
 
-export const useDeleteShort = () => {
+export const useDeleteMusicVideo = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (
       body: PrismMediaItem
     ): Promise<{ message: string; status: number }> => {
-      return await window.electron.deleteShortHandler(body);
+      return await window.electron.deleteMusicHandler(body);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["shorts"] });
+      queryClient.invalidateQueries({ queryKey: ["music"] });
     },
   });
 };

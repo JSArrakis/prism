@@ -74,6 +74,14 @@ type EventPayloadMapping = {
   createShow: Promise<{ message: string; status: number }>;
   deleteShow: Promise<{ message: string; status: number }>;
   updateShow: Promise<{ message: string; status: number }>;
+  getShorts: Promise<PrismMediaItem[]>;
+  createShort: Promise<{ message: string; status: number }>;
+  deleteShort: Promise<{ message: string; status: number }>;
+  updateShort: Promise<{ message: string; status: number }>;
+  getMusic: Promise<PrismMediaItem[]>;
+  createMusic: Promise<{ message: string; status: number }>;
+  deleteMusic: Promise<{ message: string; status: number }>;
+  updateMusic: Promise<{ message: string; status: number }>;
   getAestheticTags: Promise<Tag[]>;
   createAestheticTag: Promise<{ message: string; status: number }>;
   deleteAestheticTag: Promise<{ message: string; status: number }>;
@@ -120,6 +128,26 @@ interface Window {
     ) => Promise<{ message: string; status: number }>;
     updateShowHandler: (
       movie: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    getShortsHandler: () => Promise<PrismMediaItem[]>;
+    createShortHandler: (
+      short: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    deleteShortHandler: (
+      short: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updateShortHandler: (
+      short: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    getMusicHandler: () => Promise<PrismMediaItem[]>;
+    createMusicHandler: (
+      music: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    deleteMusicHandler: (
+      music: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updateMusicHandler: (
+      music: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
     getAestheticTagsHandler: () => Promise<Tag[]>;
     createAestheticTagHandler: (

@@ -23,6 +23,20 @@ electron.contextBridge.exposeInMainWorld("electron", {
     await ipcInvoke("deleteShow", show),
   updateShowHandler: async (show: PrismMediaItem) =>
     await ipcInvoke("updateShow", show),
+  getShortsHandler: async () => await ipcInvoke("getShorts"),
+  createShortHandler: async (short: PrismMediaItem) =>
+    await ipcInvoke("createShort", short),
+  deleteShortHandler: async (short: PrismMediaItem) =>
+    await ipcInvoke("deleteShort", short),
+  updateShortHandler: async (short: PrismMediaItem) =>
+    await ipcInvoke("updateShort", short),
+  getMusicHandler: async () => await ipcInvoke("getMusic"),
+  createMusicHandler: async (music: PrismMediaItem) =>
+    await ipcInvoke("createMusic", music),
+  deleteMusicHandler: async (music: PrismMediaItem) =>
+    await ipcInvoke("deleteMusic", music),
+  updateMusicHandler: async (music: PrismMediaItem) =>
+    await ipcInvoke("updateMusic", music),
   getAestheticTagsHandler: async () => await ipcInvoke("getAestheticTags"),
   createAestheticTagHandler: async (tag: Tag) =>
     await ipcInvoke("createAestheticTag", tag),

@@ -14,7 +14,24 @@ import {
   getMoviesHandler,
   updateMovieHandler,
 } from "./handlers/movieHandlers.js";
-import { createShowHandler, deleteShowHandler, getShowsHandler, updateShowHandler } from "./handlers/showHandlers.js";
+import {
+  createShowHandler,
+  deleteShowHandler,
+  getShowsHandler,
+  updateShowHandler,
+} from "./handlers/showHandlers.js";
+import {
+  createShortHandler,
+  deleteShortHandler,
+  getShortsHandler,
+  updateShortHandler,
+} from "./handlers/shortHandlers.js";
+import {
+  createMusicHandler,
+  deleteMusicHandler,
+  getMusicHandler,
+  updateMusicHandler,
+} from "./handlers/musicHandlers.js";
 import {
   createAestheticTagHandler,
   deleteAestheticTagHandler,
@@ -98,6 +115,30 @@ app.on("ready", () => {
   });
   ipcMainHandle("updateShow", async (_event: any, show: PrismMediaItem) => {
     return await updateShowHandler(show);
+  });
+  ipcMainHandle("getShorts", async () => {
+    return await getShortsHandler();
+  });
+  ipcMainHandle("createShort", async (_event: any, short: PrismMediaItem) => {
+    return await createShortHandler(short);
+  });
+  ipcMainHandle("deleteShort", async (_event: any, short: PrismMediaItem) => {
+    return await deleteShortHandler(short);
+  });
+  ipcMainHandle("updateShort", async (_event: any, short: PrismMediaItem) => {
+    return await updateShortHandler(short);
+  });
+  ipcMainHandle("getMusic", async () => {
+    return await getMusicHandler();
+  });
+  ipcMainHandle("createMusic", async (_event: any, music: PrismMediaItem) => {
+    return await createMusicHandler(music);
+  });
+  ipcMainHandle("deleteMusic", async (_event: any, music: PrismMediaItem) => {
+    return await deleteMusicHandler(music);
+  });
+  ipcMainHandle("updateMusic", async (_event: any, music: PrismMediaItem) => {
+    return await updateMusicHandler(music);
   });
   ipcMainHandle("getAestheticTags", async () => {
     return await getAestheticTagsHandler();

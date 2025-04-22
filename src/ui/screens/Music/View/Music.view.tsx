@@ -1,22 +1,46 @@
-import { FC } from 'react';
-import { MusicViewModel } from './Music.viewmodel';
-import styles from './Music.module.css';
+import { FC } from "react";
+import { MusicVideosViewModel } from "./Music.viewmodel";
+import styles from "./MusicVideos.module.css";
+import BufferItemList from "../../../components/BufferItemList/BufferItemList";
 
-interface MusicViewProps {
-  viewModel: MusicViewModel;
+interface MusicVideosViewProps {
+  viewModel: MusicVideosViewModel;
 }
 
-const MusicView: FC<MusicViewProps> = ({ viewModel }) => {
+const MusicVideosView: FC<MusicVideosViewProps> = ({ viewModel }) => {
+  const selectedMusicVideo: PrismMediaItem = viewModel.selectedMusicVideo
+    ? viewModel.selectedMusicVideo
+    : {
+        mediaItemId: "",
+        title: "",
+        alias: "",
+        imdb: "",
+        tags: [],
+        blocks: [],
+        episodeCount: 0,
+        episodes: [],
+      };
   return (
     <div className={styles.screen}>
-      <div className={styles.screenTitle}>Music Videos</div>
+      <div className={styles.screenTitle}>MusicVideos</div>
       <div className={styles.mainContent}>
         <div className={styles.screenFormBorder}>
-          <div className={styles.screenFormBodyContainer}></div>
+          <div className={styles.screenFormBodyContainer}>
+            <BufferItemList
+              isEditModalOpen={viewModel.isEditModalOpen}
+              mediaList={viewModel.musicVideos}
+              type="music"
+              selectedItem={selectedMusicVideo}
+              onEdit={viewModel.editMusicVideo}
+              onSave={viewModel.saveMusicVideo}
+              onRemove={viewModel.onRemove}
+              onAddItem={viewModel.addMusicVideos}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default MusicView;
+export default MusicVideosView;
