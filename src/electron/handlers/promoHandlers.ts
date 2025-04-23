@@ -1,6 +1,6 @@
 import http from "http";
 
-export async function getPromoHandler(): Promise<PrismMediaItem[]> {
+export async function getPromosHandler(): Promise<PrismMediaItem[]> {
   return new Promise((resolve, reject) => {
     const options = {
       hostname: "localhost",

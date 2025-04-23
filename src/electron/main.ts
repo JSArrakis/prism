@@ -33,6 +33,18 @@ import {
   updateMusicHandler,
 } from "./handlers/musicHandlers.js";
 import {
+  createCommercialHandler,
+  deleteCommercialHandler,
+  getCommercialsHandler,
+  updateCommercialHandler,
+} from "./handlers/commercialHandlers.js";
+import {
+  createPromoHandler,
+  deletePromoHandler,
+  getPromosHandler,
+  updatePromoHandler,
+} from "./handlers/promoHandlers.js";
+import {
   createAestheticTagHandler,
   deleteAestheticTagHandler,
   getAestheticTagsHandler,
@@ -139,6 +151,39 @@ app.on("ready", () => {
   });
   ipcMainHandle("updateMusic", async (_event: any, music: PrismMediaItem) => {
     return await updateMusicHandler(music);
+  });
+  ipcMainHandle("getCommercials", async () => {
+    return await getCommercialsHandler();
+  });
+  ipcMainHandle(
+    "createCommercial",
+    async (_event: any, commercial: PrismMediaItem) => {
+      return await createCommercialHandler(commercial);
+    }
+  );
+  ipcMainHandle(
+    "deleteCommercial",
+    async (_event: any, commercial: PrismMediaItem) => {
+      return await deleteCommercialHandler(commercial);
+    }
+  );
+  ipcMainHandle(
+    "updateCommercial",
+    async (_event: any, commercial: PrismMediaItem) => {
+      return await updateCommercialHandler(commercial);
+    }
+  );
+  ipcMainHandle("getPromos", async () => {
+    return await getPromosHandler();
+  });
+  ipcMainHandle("createPromo", async (_event: any, promo: PrismMediaItem) => {
+    return await createPromoHandler(promo);
+  });
+  ipcMainHandle("deletePromo", async (_event: any, promo: PrismMediaItem) => {
+    return await deletePromoHandler(promo);
+  });
+  ipcMainHandle("updatePromo", async (_event: any, promo: PrismMediaItem) => {
+    return await updatePromoHandler(promo);
   });
   ipcMainHandle("getAestheticTags", async () => {
     return await getAestheticTagsHandler();

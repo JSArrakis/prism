@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { MusicVideosViewModel } from "./Music.viewmodel";
-import styles from "./MusicVideos.module.css";
+import styles from "./Music.module.css";
 import BufferItemList from "../../../components/BufferItemList/BufferItemList";
 
 interface MusicVideosViewProps {

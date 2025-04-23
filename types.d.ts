@@ -14,6 +14,7 @@ type PrismCurationItem = {
 type PrismMediaItem = {
   mediaItemId: string;
   title?: string;
+  artist?: string;
   alias?: string;
   imdb?: string;
   tags: string[];
@@ -82,6 +83,14 @@ type EventPayloadMapping = {
   createMusic: Promise<{ message: string; status: number }>;
   deleteMusic: Promise<{ message: string; status: number }>;
   updateMusic: Promise<{ message: string; status: number }>;
+  getCommercials: Promise<PrismMediaItem[]>;
+  createCommercial: Promise<{ message: string; status: number }>;
+  deleteCommercial: Promise<{ message: string; status: number }>;
+  updateCommercial: Promise<{ message: string; status: number }>;
+  getPromos: Promise<PrismMediaItem[]>;
+  createPromo: Promise<{ message: string; status: number }>;
+  deletePromo: Promise<{ message: string; status: number }>;
+  updatePromo: Promise<{ message: string; status: number }>;
   getAestheticTags: Promise<Tag[]>;
   createAestheticTag: Promise<{ message: string; status: number }>;
   deleteAestheticTag: Promise<{ message: string; status: number }>;
@@ -148,6 +157,26 @@ interface Window {
     ) => Promise<{ message: string; status: number }>;
     updateMusicHandler: (
       music: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    getCommercialsHandler: () => Promise<PrismMediaItem[]>;
+    createCommercialHandler: (
+      commercial: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    deleteCommercialHandler: (
+      commercial: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updateCommercialHandler: (
+      commercial: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    getPromosHandler: () => Promise<PrismMediaItem[]>;
+    createPromoHandler: (
+      promo: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    deletePromoHandler: (
+      promo: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updatePromoHandler: (
+      promo: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
     getAestheticTagsHandler: () => Promise<Tag[]>;
     createAestheticTagHandler: (
