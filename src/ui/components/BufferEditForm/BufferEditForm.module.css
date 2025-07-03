@@ -7,7 +7,7 @@
   color: white;
   justify-content: space-between;
   box-sizing: border-box;
-  min-width: 680px;
+  width: 500px;
 }
 
 .editModalHeader {
@@ -88,6 +88,7 @@
   justify-content: flex-start;
   flex-grow: 1;
   overflow: hidden;
+  width: 100%;
 }
 
 .editInputField {
@@ -121,6 +122,7 @@
 .topContainer {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .editModalTitle,
@@ -130,14 +132,14 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 }
 
 .mediaLabels {
-  width: calc(48% - 4px);
+  width: 100%;
   min-width: 250px;
   display: flex;
   flex-direction: column;
-  margin-right: 4px;
 }
 
 .curationContainer {

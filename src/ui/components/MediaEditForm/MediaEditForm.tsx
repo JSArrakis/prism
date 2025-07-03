@@ -12,6 +12,8 @@ import { useGetAllEraTags } from "../../services/tags/useEraTags";
 import { useGetAllGenreTags } from "../../services/tags/useGenreTags";
 import { useGetAllSpecialtyTags } from "../../services/tags/useSpecialtyTags";
 import EpisodeEditForm from "./EpisodeEditForm/EpisodeEditForm";
+import { useGetAllAgeGroups } from "../../services/tags/useAgeGroups";
+import { useGetAllHolidays } from "../../services/tags/useHolidays";
 
 interface MediaEditFormProps {
   item: PrismMediaItem;
@@ -53,8 +55,10 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   // =============== Tag Select ================
 
   const $getAllAestheticTags = useGetAllAestheticTags();
+  const $getAllAgeGroupTags = useGetAllAgeGroups();
   const $getAllEraTags = useGetAllEraTags();
   const $getAllGenreTags = useGetAllGenreTags();
+  const $getAllHolidayTags = useGetAllHolidays();
   const $getAllSpecialtyTags = useGetAllSpecialtyTags();
 
   const [aestheticTags, setAestheticTags] = useState<Tag[]>([]);
@@ -72,6 +76,12 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
   }, [$getAllAestheticTags.data]);
 
   useEffect(() => {
+    if ($getAllAgeGroupTags.data) {
+      setAgeGroupTags($getAllAgeGroupTags.data);
+    }
+  }, [$getAllAgeGroupTags.data]);
+
+  useEffect(() => {
     if ($getAllEraTags.data) {
       setEraTags($getAllEraTags.data);
     }
@@ -82,6 +92,12 @@ const MediaEditForm: FC<MediaEditFormProps> = ({
       setGenreTags($getAllGenreTags.data);
     }
   }, [$getAllGenreTags.data]);
+
+  useEffect(() => {
+    if ($getAllHolidayTags.data) {
+      setHolidayTags($getAllHolidayTags.data);
+    }
+  }, [$getAllHolidayTags.data]);
 
   useEffect(() => {
     if ($getAllSpecialtyTags.data) {

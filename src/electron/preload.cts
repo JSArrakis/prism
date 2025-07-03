@@ -51,6 +51,13 @@ electron.contextBridge.exposeInMainWorld("electron", {
     await ipcInvoke("deletePromo", promo),
   updatePromoHandler: async (promo: PrismMediaItem) =>
     await ipcInvoke("updatePromo", promo),
+  getBumpersHandler: async () => await ipcInvoke("getBumpers"),
+  createBumperHandler: async (bumper: PrismMediaItem) =>
+    await ipcInvoke("createBumper", bumper),
+  deleteBumperHandler: async (bumper: PrismMediaItem) =>
+    await ipcInvoke("deleteBumper", bumper),
+  updateBumperHandler: async (bumper: PrismMediaItem) =>
+    await ipcInvoke("updateBumper", bumper),
   getAestheticTagsHandler: async () => await ipcInvoke("getAestheticTags"),
   createAestheticTagHandler: async (tag: Tag) =>
     await ipcInvoke("createAestheticTag", tag),
@@ -69,6 +76,25 @@ electron.contextBridge.exposeInMainWorld("electron", {
     await ipcInvoke("createSpecialtyTag", tag),
   deleteSpecialtyTagHandler: async (tag: Tag) =>
     await ipcInvoke("deleteSpecialtyTag", tag),
+  getAgeGroupsHandler: async () => await ipcInvoke("getAgeGroups"),
+  createAgeGroupHandler: async (tag: Tag) =>
+    await ipcInvoke("createAgeGroup", tag),
+  deleteAgeGroupHandler: async (tag: Tag) =>
+    await ipcInvoke("deleteAgeGroup", tag),
+  updateAgeGroupHandler: async (tag: Tag) =>
+    await ipcInvoke("updateAgeGroup", tag),
+  getHolidaysHandler: async () => await ipcInvoke("getHolidays"),
+  createHolidayHandler: async (tag: Tag) =>
+    await ipcInvoke("createHoliday", tag),
+  deleteHolidayHandler: async (tag: Tag) =>
+    await ipcInvoke("deleteHoliday", tag),
+  updateHolidayHandler: async (tag: Tag) =>
+    await ipcInvoke("updateHoliday", tag),
+  getMusicGenresHandler: async () => await ipcInvoke("getMusicGenres"),
+  createMusicGenreHandler: async (tag: Tag) =>
+    await ipcInvoke("createMusicGenre", tag),
+  deleteMusicGenreHandler: async (tag: Tag) =>
+    await ipcInvoke("deleteMusicGenre", tag),
 } satisfies Window["electron"]);
 
 function ipcInvoke<Key extends keyof EventPayloadMapping>(

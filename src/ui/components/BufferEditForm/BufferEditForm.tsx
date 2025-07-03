@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useRef, useEffect, use } from "react";
 import styles from "./BufferEditForm.module.css";
 import { getFileName, normalizeItem } from "../../common/helpers";
 import {
@@ -9,6 +9,8 @@ import { useGetAllAestheticTags } from "../../services/tags/useAestheticTags";
 import { useGetAllEraTags } from "../../services/tags/useEraTags";
 import { useGetAllGenreTags } from "../../services/tags/useGenreTags";
 import { useGetAllSpecialtyTags } from "../../services/tags/useSpecialtyTags";
+import { useGetAllAgeGroups } from "../../services/tags/useAgeGroups";
+import { useGetAllHolidays } from "../../services/tags/useHolidays";
 
 interface BufferEditFormProps {
   item: PrismMediaItem;
@@ -46,8 +48,10 @@ const BufferEditForm: FC<BufferEditFormProps> = ({
   // =============== Tag Select ================
 
   const $getAllAestheticTags = useGetAllAestheticTags();
+  const $getAllAgeGroupTags = useGetAllAgeGroups();
   const $getAllEraTags = useGetAllEraTags();
   const $getAllGenreTags = useGetAllGenreTags();
+  const $getAllHolidayTags = useGetAllHolidays();
   const $getAllSpecialtyTags = useGetAllSpecialtyTags();
 
   const [aestheticTags, setAestheticTags] = useState<Tag[]>([]);
@@ -65,6 +69,12 @@ const BufferEditForm: FC<BufferEditFormProps> = ({
   }, [$getAllAestheticTags.data]);
 
   useEffect(() => {
+    if ($getAllAgeGroupTags.data) {
+      setAgeGroupTags($getAllAgeGroupTags.data);
+    }
+  }, [$getAllAgeGroupTags.data]);
+
+  useEffect(() => {
     if ($getAllEraTags.data) {
       setEraTags($getAllEraTags.data);
     }
@@ -75,6 +85,12 @@ const BufferEditForm: FC<BufferEditFormProps> = ({
       setGenreTags($getAllGenreTags.data);
     }
   }, [$getAllGenreTags.data]);
+
+  useEffect(() => {
+    if ($getAllHolidayTags.data) {
+      setHolidayTags($getAllHolidayTags.data);
+    }
+  }, [$getAllHolidayTags.data]);
 
   useEffect(() => {
     if ($getAllSpecialtyTags.data) {

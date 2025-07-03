@@ -1,5 +1,5 @@
 import useRootStack from "../../navigation/useRootStack";
-import AgeGroupsView, { useAgeGroupsViewModel } from './View';
+import AgeGroupsView, { useAgeGroupsViewModel } from "./View";
 
 function AgeGroups() {
   const navigate = useRootStack();

@@ -74,6 +74,12 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
               >
                 Promos
               </Button>
+              <Button
+                onClick={() => navigateTo("bumpers")}
+                className={styles.subButton}
+              >
+                Bumpers
+              </Button>
             </div>
             <Button
               onClick={() => toggleAccordion("tags")}
@@ -121,6 +127,12 @@ const MainLayoutView: FC<MainLayoutViewProps> = function MainLayoutView({
                 className={styles.subButton}
               >
                 Holidays
+              </Button>
+              <Button
+                onClick={() => navigateTo("music-genres")}
+                className={styles.subButton}
+              >
+                Music Genres
               </Button>
             </div>
             <Button

@@ -4,6 +4,7 @@ import { DEFAULT_TAG } from "../../../common/constants";
 
 interface BufferIemProps {
   item: PrismMediaItem;
+  type: string;
   setNewTitle: (title: string) => void;
   onEdit: (item: PrismMediaItem) => void;
   onSave: (item: PrismMediaItem) => void;
@@ -12,6 +13,7 @@ interface BufferIemProps {
 
 const BufferItem: FC<BufferIemProps> = ({
   item,
+  type,
   setNewTitle,
   onEdit,
   onSave,
@@ -85,17 +87,19 @@ const BufferItem: FC<BufferIemProps> = ({
             <div className={styles.itemTitle}>{title}</div>
           </div>
         ) : (
-          <div className={styles.titleInputContainer}>
-            <input
-              type="text"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="ENTER TITLE"
-              className={`${styles.titleInput} ${
-                isFlashing ? styles.flashRed : ""
-              }`}
-            />
-          </div>
+          type !== "commercial" && (
+            <div className={styles.titleInputContainer}>
+              <input
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+                placeholder="ENTER TITLE"
+                className={`${styles.titleInput} ${
+                  isFlashing ? styles.flashRed : ""
+                }`}
+              />
+            </div>
+          )
         )}
         {item.path && (
           <div className={styles.itemPathContainer}>
@@ -104,7 +108,7 @@ const BufferItem: FC<BufferIemProps> = ({
         )}
       </div>
       <div className={styles.actionsRow}>
-        {!hasIncomingTitle && (
+        {!hasIncomingTitle && type !== "commercial" && (
           <div className={styles.saveRow} onClick={handleTitleSave}>
             <span className="material-symbols-rounded">save</span>
           </div>

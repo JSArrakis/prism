@@ -14,7 +14,6 @@ type PrismCurationItem = {
 type PrismMediaItem = {
   mediaItemId: string;
   title?: string;
-  artist?: string;
   alias?: string;
   imdb?: string;
   tags: string[];
@@ -59,7 +58,17 @@ type PrismSegmentedTags = {
 type Tag = {
   tagId: string;
   name: string;
+  subgenres?: Subgenre[];
+  seasonStartDate?: string;
+  seasonEndDate?: string;
+  holidayDate?: string;
+  sequence?: number;
 };
+
+type Subgenre = {
+  tagId: string;
+  name: string;
+}
 
 type EventPayloadMapping = {
   openFileDialog: Promise<string[]>;
@@ -91,6 +100,10 @@ type EventPayloadMapping = {
   createPromo: Promise<{ message: string; status: number }>;
   deletePromo: Promise<{ message: string; status: number }>;
   updatePromo: Promise<{ message: string; status: number }>;
+  getBumpers: Promise<PrismMediaItem[]>;
+  createBumper: Promise<{ message: string; status: number }>; 
+  deleteBumper: Promise<{ message: string; status: number }>;
+  updateBumper: Promise<{ message: string; status: number }>;
   getAestheticTags: Promise<Tag[]>;
   createAestheticTag: Promise<{ message: string; status: number }>;
   deleteAestheticTag: Promise<{ message: string; status: number }>;
@@ -103,6 +116,17 @@ type EventPayloadMapping = {
   getSpecialtyTags: Promise<Tag[]>;
   createSpecialtyTag: Promise<{ message: string; status: number }>;
   deleteSpecialtyTag: Promise<{ message: string; status: number }>;
+  getAgeGroups: Promise<Tag[]>;
+  createAgeGroup: Promise<{ message: string; status: number }>;
+  deleteAgeGroup: Promise<{ message: string; status: number }>;
+  updateAgeGroup: Promise<{ message: string; status: number }>;
+  getHolidays: Promise<Tag[]>;
+  createHoliday: Promise<{ message: string; status: number }>;
+  deleteHoliday: Promise<{ message: string; status: number }>;
+  updateHoliday: Promise<{ message: string; status: number }>;
+  getMusicGenres: Promise<Tag[]>;
+  createMusicGenre: Promise<{ message: string; status: number }>;
+  deleteMusicGenre: Promise<{ message: string; status: number }>;
 };
 
 interface Window {
@@ -178,6 +202,16 @@ interface Window {
     updatePromoHandler: (
       promo: PrismMediaItem
     ) => Promise<{ message: string; status: number }>;
+    getBumpersHandler: () => Promise<PrismMediaItem[]>;
+    createBumperHandler: (
+      bumper: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    deleteBumperHandler: (
+      bumper: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
+    updateBumperHandler: (
+      bumper: PrismMediaItem
+    ) => Promise<{ message: string; status: number }>;
     getAestheticTagsHandler: () => Promise<Tag[]>;
     createAestheticTagHandler: (
       tag: Tag
@@ -204,6 +238,33 @@ interface Window {
       tag: Tag
     ) => Promise<{ message: string; status: number }>;
     deleteSpecialtyTagHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    getAgeGroupsHandler: () => Promise<Tag[]>;
+    createAgeGroupHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    deleteAgeGroupHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    updateAgeGroupHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    getHolidaysHandler: () => Promise<Tag[]>;
+    createHolidayHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    deleteHolidayHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    updateHolidayHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    getMusicGenresHandler: () => Promise<Tag[]>;
+    createMusicGenreHandler: (
+      tag: Tag
+    ) => Promise<{ message: string; status: number }>;
+    deleteMusicGenreHandler: (
       tag: Tag
     ) => Promise<{ message: string; status: number }>;
   };

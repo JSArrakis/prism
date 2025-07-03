@@ -49,6 +49,9 @@ const useMainLayoutViewModel = (): MainLayoutViewModel => {
       case "blocks":
         navigate("/blocks");
         break;
+      case "bumpers":
+        navigate("/bumpers");
+        break;
       case "cascade":
         navigate("/cascade");
         break;
@@ -82,6 +85,9 @@ const useMainLayoutViewModel = (): MainLayoutViewModel => {
         break;
       case "music":
         navigate("/music");
+        break;
+      case "music-genres":
+        navigate("/music-genres");
         break;
       case "promos":
         navigate("/promos");

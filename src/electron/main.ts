@@ -45,6 +45,12 @@ import {
   updatePromoHandler,
 } from "./handlers/promoHandlers.js";
 import {
+  createBumperHandler,
+  deleteBumperHandler,
+  getBumpersHandler,
+  updateBumperHandler,
+} from "./handlers/bumperHandlers.js";
+import {
   createAestheticTagHandler,
   deleteAestheticTagHandler,
   getAestheticTagsHandler,
@@ -64,6 +70,23 @@ import {
   deleteSpecialtyTagHandler,
   getSpecialtyTagsHandler,
 } from "./handlers/specialtyTagHandlers.js";
+import {
+  createAgeGroupHandler,
+  deleteAgeGroupHandler,
+  getAgeGroupsHandler,
+  updateAgeGroupHandler,
+} from "./handlers/ageGroupHandlers.js";
+import {
+  createHolidayHandler,
+  deleteHolidayHandler,
+  getHolidaysHandler,
+  updateHolidayHandler,
+} from "./handlers/holidayHandlers.js";
+import {
+  createMusicGenreHandler,
+  deleteMusicGenreHandler,
+  getMusicGenresHandler,
+} from "./handlers/musicGenreHandlers.js";
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
@@ -185,6 +208,18 @@ app.on("ready", () => {
   ipcMainHandle("updatePromo", async (_event: any, promo: PrismMediaItem) => {
     return await updatePromoHandler(promo);
   });
+  ipcMainHandle("getBumpers", async () => {
+    return await getBumpersHandler();
+  });
+  ipcMainHandle("createBumper", async (_event: any, bumper: PrismMediaItem) => {
+    return await createBumperHandler(bumper);
+  });
+  ipcMainHandle("deleteBumper", async (_event: any, bumper: PrismMediaItem) => {
+    return await deleteBumperHandler(bumper);
+  });
+  ipcMainHandle("updateBumper", async (_event: any, bumper: PrismMediaItem) => {
+    return await updateBumperHandler(bumper);
+  });
   ipcMainHandle("getAestheticTags", async () => {
     return await getAestheticTagsHandler();
   });
@@ -220,5 +255,38 @@ app.on("ready", () => {
   });
   ipcMainHandle("deleteSpecialtyTag", async (_event: any, tag: Tag) => {
     return await deleteSpecialtyTagHandler(tag);
+  });
+  ipcMainHandle("getAgeGroups", async () => {
+    return await getAgeGroupsHandler();
+  });
+  ipcMainHandle("createAgeGroup", async (_event: any, tag: Tag) => {
+    return await createAgeGroupHandler(tag);
+  });
+  ipcMainHandle("deleteAgeGroup", async (_event: any, tag: Tag) => {
+    return await deleteAgeGroupHandler(tag);
+  });
+  ipcMainHandle("updateAgeGroup", async (_event: any, tag: Tag) => {
+    return await updateAgeGroupHandler(tag);
+  });
+  ipcMainHandle("getHolidays", async () => {
+    return await getHolidaysHandler();
+  });
+  ipcMainHandle("createHoliday", async (_event: any, tag: Tag) => {
+    return await createHolidayHandler(tag);
+  });
+  ipcMainHandle("deleteHoliday", async (_event: any, tag: Tag) => {
+    return await deleteHolidayHandler(tag);
+  });
+  ipcMainHandle("updateHoliday", async (_event: any, tag: Tag) => {
+    return await updateHolidayHandler(tag);
+  });
+  ipcMainHandle("getMusicGenres", async () => {
+    return await getMusicGenresHandler();
+  });
+  ipcMainHandle("createMusicGenre", async (_event: any, tag: Tag) => {
+    return await createMusicGenreHandler(tag);
+  });
+  ipcMainHandle("deleteMusicGenre", async (_event: any, tag: Tag) => {
+    return await deleteMusicGenreHandler(tag);
   });
 });

@@ -93,6 +93,7 @@ const BufferItemList: FC<BufferItemListProps> = ({
           <BufferItem
             key={item.mediaItemId}
             item={item}
+            type={type}
             setNewTitle={setNewTitle}
             onEdit={onEdit}
             onSave={onSave}
@@ -104,7 +105,7 @@ const BufferItemList: FC<BufferItemListProps> = ({
           fullScreen={false}
           style={{
             padding: "0px",
-            maxWidth: "calc(100% - 170px)",
+            maxWidth: "500px",
           }}
         >
           <BufferEditForm

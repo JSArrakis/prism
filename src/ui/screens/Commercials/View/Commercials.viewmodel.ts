@@ -20,7 +20,9 @@ interface CommercialsActions {
   addCommercials: () => void;
 }
 
-export interface CommercialsViewModel extends CommercialsData, CommercialsActions {}
+export interface CommercialsViewModel
+  extends CommercialsData,
+    CommercialsActions {}
 
 const useCommercialsViewModel = (
   navigate: ReturnType<typeof useRootStack>
@@ -30,15 +32,16 @@ const useCommercialsViewModel = (
   const $deleteCommercial = useDeleteCommercial();
   const $updateCommercial = useUpdateCommercial();
 
-  const [savedCommercials, setSavedCommercials] = useState<PrismMediaItem[]>([]);
+  const [savedCommercials, setSavedCommercials] = useState<PrismMediaItem[]>(
+    []
+  );
 
   const [newCommercials, setNewCommercials] = useState<PrismMediaItem[]>([]);
 
   const [commercials, setCommercials] = useState<PrismMediaItem[]>([]);
   const [isEditModalOpen, setEditModalState] = useState(false);
-  const [selectedCommercial, setSelectedCommercial] = useState<PrismMediaItem | null>(
-    null
-  );
+  const [selectedCommercial, setSelectedCommercial] =
+    useState<PrismMediaItem | null>(null);
 
   useEffect(() => {
     if ($getCommercials.data) {
@@ -58,10 +61,17 @@ const useCommercialsViewModel = (
       const newCommercials = filePaths.map((commercialPath: string) => ({
         mediaItemId: normalizeItem(commercialPath),
         path: commercialPath,
-        tags: [],
+        tags: ["Default"],
       }));
 
-      setNewCommercials((prev) => [...prev, ...newCommercials]);
+      for (const commercial of newCommercials) {
+        const existingCommercial = savedCommercials.find(
+          (m) => m.mediaItemId === commercial.mediaItemId
+        );
+        if (!existingCommercial) {
+          $createCommercial.mutate(commercial);
+        }
+      }
     }
   };
 
@@ -71,7 +81,9 @@ const useCommercialsViewModel = (
       return;
     }
 
-    const commercialToEdit = commercials.find((m) => m.mediaItemId === commercial.mediaItemId);
+    const commercialToEdit = commercials.find(
+      (m) => m.mediaItemId === commercial.mediaItemId
+    );
     if (!commercialToEdit) {
       console.error("Commercial not found:", commercial);
       return;
